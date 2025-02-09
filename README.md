@@ -292,7 +292,7 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage").Network.Instancing_InvokeCustomFromClient:InvokeServer(unpack(args))
-wait(1)
+wait(0.2)
 end
 wait(1)
 end
@@ -319,7 +319,7 @@ local function openchest()
             "InstanceChest: 3", "FlowerGarden"
         )
 
-        wait(5)
+        wait(1)
     end
 end
 
@@ -574,7 +574,7 @@ while true do
         game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args2))
     end
   wait(5)
-    if DiamondsSeedAmount > 200 then 
+    if DiamondsSeedAmount > 500 then 
         local args2 = {
             [1] = "giftbatch14",
             [2] = "enjoy bro",
