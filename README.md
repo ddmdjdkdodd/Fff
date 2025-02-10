@@ -541,6 +541,7 @@ local function SetValues()
         if hugepotionamountlol > 0 then
             hugepotionamount = hugepotionamountlol
             hugepotionuid = hugepotionuidlol
+            print(hugepotionamount)
         end
 
         wait(1)
