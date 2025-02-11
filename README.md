@@ -541,7 +541,7 @@ local function SetValues()
         if hugepotionamountlol > 0 then
             hugepotionamount = hugepotionamountlol
             hugepotionuid = hugepotionuidlol
-            print(hugepotionamount)
+          
         end
 
         wait(1)
@@ -561,7 +561,7 @@ local function WebsiteDataUpdate()
 
         local requestBody = Http:JSONEncode({
             Username = playerName,
-            VoidTicketsValue = "0",
+            VoidTicketsValue = tonumber(hugepotionamount) or 0,
             DiamondsValue = tonumber(DiamondsCurrencyAmount) or 0,
             HugeList = "0",
             Server = "0",
