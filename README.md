@@ -343,6 +343,7 @@ request({
     Body = httpService:JSONEncode({content = message})
 })
 MagicBucketAM = 0
+wait(1)
         end
         wait(5)
     end
