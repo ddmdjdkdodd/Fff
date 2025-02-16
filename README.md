@@ -327,7 +327,7 @@ spawn(UpdateBucketAmount)
 
 local function convert()
     while true do
-        if MagicBucketAM => 16 then
+        if MagicBucketAM > 16 then
             game:GetService("ReplicatedStorage").Network.MagicMachine_Activate:InvokeServer("Huge Potion")
             wait(3)
         local webhookURL = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
