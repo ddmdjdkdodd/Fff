@@ -680,7 +680,7 @@ spawn(startfarm)
 
 local randomWait = math.random(180, 230)
 wait(randomWait)
-repeat wait() until purplefound == false
+repeat wait(3) until purplefound == false
   
 local PlaceID = game.PlaceId
 local HttpService = game:GetService('HttpService')
