@@ -329,6 +329,19 @@ local function convert()
     while true do
         if MagicBucketAM > 16 then
             game:GetService("ReplicatedStorage").Network.MagicMachine_Activate:InvokeServer("Huge Potion")
+        local webhookURL = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+local httpService = game:GetService("HttpService")
+local request = (syn and syn.request) or request or (http and http.request) or http_request
+local player = game.Players.LocalPlayer
+
+local message = player.Name .. " | + 1 Huge Potion | Huge Total: " .. hugeamount
+
+request({
+    Url = webhookURL,
+    Method = "POST",
+    Headers = {["Content-Type"] = "application/json"},
+    Body = httpService:JSONEncode({content = message})
+})
         end
         wait(1)
     end
