@@ -278,33 +278,6 @@ local function UpdateBucketAmount()
             end
         end
 
-        local InstaPlantItems = GetItemInfo("Misc", InstaPlantData)
-        for _, ItemInfo in pairs(InstaPlantItems) do
-            local ItemData = ItemInfo.data
-            if ItemData._am then
-InstaUID = ItemInfo.uid 
-                InstaPlantAmount = ItemData._am
-            end
-        end
-
-        local SeedBagItems = GetItemInfo("Misc", SeedBagData)
-        for _, ItemInfo in pairs(SeedBagItems) do
-            local ItemData = ItemInfo.data
-            if ItemData._am then
-SeedBagUID = ItemInfo.uid
-                SeedBagAmount = ItemData._am
-            end
-        end
-
-
-    local DiamondsItems = GetItemInfo("Seed", DiamondData)
-        for _, ItemInfo in pairs(DiamondsItems) do
-            local ItemData = ItemInfo.data
-            if ItemData._am then
-DiamondSeedUID = ItemInfo.uid
-                DiamondsSeedAmount = ItemData._am
-            end
-        end
 
         local CurrencyItems = GetItemInfo("Currency", ItemTable)
         for _, ItemInfo in pairs(CurrencyItems) do
