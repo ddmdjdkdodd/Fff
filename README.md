@@ -653,6 +653,19 @@ purplefound = false
     end
 end
 
+local function BodyVelocity()
+    while true do
+        task.wait(0.1)
+        local humanoidRootPart = getHumanoidRootPart()
+        if humanoidRootPart then
+            local BV = humanoidRootPart:FindFirstChild("BodyVelocity") or Instance.new("BodyVelocity", humanoidRootPart)
+            BV.Velocity = Vector3.new(0, 0.001, 0)
+            BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        end
+    end
+end
+
+spawn(BodyVelocity)
 
 local function startfarm()
    
