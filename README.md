@@ -715,14 +715,10 @@ spawn(RemoteRunner)
 
 local function startfarm()
 while true do
-    if BucketAmount > 10 then
-        if not teleportToPurple() then
-            if BucketAmount > 30 then
+    if BucketAmount > 5 then
+        if not teleportToRoyalPurple() then
+            if not teleportToChest() then
                 teleportToRandomRow()
-            else
-                if not teleportToChest() then
-                    teleportToRandomRow()
-                end
             end
         end
     else
@@ -734,6 +730,7 @@ while true do
 end
 end
 spawn(startfarm)
+
 
 
 local randomWait = math.random(180, 230)
