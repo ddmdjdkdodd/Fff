@@ -176,21 +176,29 @@ local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-repeat wait() until Workspace:FindFirstChild("__THINGS") 
-repeat wait() until Workspace.__THINGS:FindFirstChild("Instances") 
-repeat wait() until Workspace.__THINGS.Instances:FindFirstChild("AdvancedDigsite") 
-repeat wait() until Workspace.__THINGS.Instances.AdvancedDigsite:FindFirstChild("Teleports") 
-repeat wait() until Workspace.__THINGS.Instances.AdvancedDigsite.Teleports:FindFirstChild("Enter")
+local function waitForChildRecursive(parent, childName)
+    while not parent:FindFirstChild(childName) do
+        parent.ChildAdded:Wait()
+    end
+    return parent[childName]
+end
 
-local targetPosition = Workspace.__THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position
+local things = waitForChildRecursive(Workspace, "__THINGS")
+local instances = waitForChildRecursive(things, "Instances")
+local digsite = waitForChildRecursive(instances, "AdvancedDigsite")
+local teleports = waitForChildRecursive(digsite, "Teleports")
+local enter = waitForChildRecursive(teleports, "Enter")
+
+local targetPosition = enter.Position
 
 repeat
-    wait(1)
     humanoidRootPart.CFrame = CFrame.new(targetPosition + Vector3.new(0, 100, 0))
+    wait(0.1)
 until (humanoidRootPart.Position - targetPosition).Magnitude <= 300
 
-wait(1)
+wait(0.1)
 humanoidRootPart.CFrame = CFrame.new(targetPosition)
+
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
