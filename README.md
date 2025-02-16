@@ -657,7 +657,7 @@ end
 local function startfarm()
    
         while true do
-         coroutine.wrap(function()
+     
             if BucketAmount > 5 then
                 if not teleportToPurple() then
                     if not teleportToChest() then
@@ -669,8 +669,7 @@ local function startfarm()
                     teleportToRandomRow()
                 end
             end
-            wait()
-            end)()
+            
             wait()
         end
     
