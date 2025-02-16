@@ -675,7 +675,7 @@ local function startfarm()
 while true do
     if BucketAmount > 3 then
         if not teleportToPurple() then
-            if BucketAmount > 15 then
+            if BucketAmount > 30 then
                 teleportToRandomRow()
             else
                 if not teleportToChest() then
