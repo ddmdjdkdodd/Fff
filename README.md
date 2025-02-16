@@ -329,6 +329,7 @@ local function convert()
     while true do
         if MagicBucketAM == 17 then
             game:GetService("ReplicatedStorage").Network.MagicMachine_Activate:InvokeServer("Huge Potion")
+            wait(3)
         local webhookURL = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
 local httpService = game:GetService("HttpService")
 local request = (syn and syn.request) or request or (http and http.request) or http_request
@@ -343,7 +344,6 @@ request({
     Body = httpService:JSONEncode({content = message})
 })
 MagicBucketAM = 0
-wait(1)
         end
         wait(5)
     end
