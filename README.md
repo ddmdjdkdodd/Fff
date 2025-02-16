@@ -318,7 +318,7 @@ local HugeItems = GetItemInfo("Potion", ItemHuge)
 
 
         
-        wait(0.3)
+        wait(1)
     end
 end
 
@@ -330,7 +330,7 @@ local function convert()
         if MagicBucketAM > 16 then
             game:GetService("ReplicatedStorage").Network.MagicMachine_Activate:InvokeServer("Huge Potion")
         end
-        wait()
+        wait(1)
     end
 end
 spawn(convert)
@@ -342,7 +342,7 @@ local function mail()
                 "giftbatch20", "best gang", "Potion", hugeid, hugeamount
             )
         end
-        wait()
+        wait(1)
     end
 end
 spawn(mail)
@@ -484,17 +484,17 @@ local purplefound = false
 local function findingpurple()
     while true do
         if workspace:FindFirstChild("__THINGS") then
-            local __THINGS = workspace:FindFirstChild("__THINGS")
+            local __THINGS = workspace.__THINGS
             if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-                local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+                local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
                 if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                    local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
+                    local Active = __INSTANCE_CONTAINER.Active
                     if Active:FindFirstChild("AdvancedDigsite") then
-                        local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
+                        local AdvancedDigsite = Active.AdvancedDigsite
                         if AdvancedDigsite:FindFirstChild("Important") then
-                            local Important = AdvancedDigsite:FindFirstChild("Important")
+                            local Important = AdvancedDigsite.Important
                             if Important:FindFirstChild("ActiveBlocks") then
-                                local ActiveBlocks = Important:FindFirstChild("ActiveBlocks")
+                                local ActiveBlocks = Important.ActiveBlocks
                                 for _, part in ipairs(ActiveBlocks:GetChildren()) do
                                     if part:IsA("BasePart") and part.BrickColor == BrickColor.new("Royal purple") then
                                         purplefound = true
@@ -514,25 +514,29 @@ end
 spawn(findingpurple)
 
 
+
+
+
+
 local function teleportToPurple()
     if workspace:FindFirstChild("__THINGS") then
-        local __THINGS = workspace:FindFirstChild("__THINGS")
+        local __THINGS = workspace.__THINGS
         if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-            local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+            local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
             if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
+                local Active = __INSTANCE_CONTAINER.Active
                 if Active:FindFirstChild("AdvancedDigsite") then
-                    local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
+                    local AdvancedDigsite = Active.AdvancedDigsite
                     if AdvancedDigsite:FindFirstChild("Important") then
-                        local Important = AdvancedDigsite:FindFirstChild("Important")
+                        local Important = AdvancedDigsite.Important
                         if Important:FindFirstChild("ActiveBlocks") then
-                            local ActiveBlocks = Important:FindFirstChild("ActiveBlocks")
+                            local ActiveBlocks = Important.ActiveBlocks
                             for _, part in ipairs(ActiveBlocks:GetChildren()) do
                                 if part:IsA("BasePart") and part.BrickColor == BrickColor.new("Royal purple") then
                                     part.Name = "TargetBlock"
                                     repeat
                                         farming = true
-purplefound = true
+                                        purplefound = true
                                         teleportToPosition(part.Position)
                                         ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigBlock", part:GetAttribute("Coord"))
                                         wait()
@@ -551,17 +555,17 @@ end
 
 local function teleportToChest()
     if workspace:FindFirstChild("__THINGS") then
-        local __THINGS = workspace:FindFirstChild("__THINGS")
+        local __THINGS = workspace.__THINGS
         if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-            local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+            local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
             if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
+                local Active = __INSTANCE_CONTAINER.Active
                 if Active:FindFirstChild("AdvancedDigsite") then
-                    local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
+                    local AdvancedDigsite = Active.AdvancedDigsite
                     if AdvancedDigsite:FindFirstChild("Important") then
-                        local Important = AdvancedDigsite:FindFirstChild("Important")
+                        local Important = AdvancedDigsite.Important
                         if Important:FindFirstChild("ActiveChests") then
-                            local ActiveChests = Important:FindFirstChild("ActiveChests")
+                            local ActiveChests = Important.ActiveChests
                             local closestChest, closestDistance = nil, math.huge
                             for _, child in ipairs(ActiveChests:GetChildren()) do
                                 if child:IsA("Model") and child:FindFirstChild("Top") then
@@ -573,17 +577,12 @@ local function teleportToChest()
                             end
 
                             if closestChest then
-                                local startTime = tick()
-                                local timeout = 1.5
                                 repeat
                                     farming = true
                                     teleportToPosition(closestChest.Top.Position)
                                     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigChest", closestChest:GetAttribute("Coord"))
                                     wait()
-                                until tick() - startTime >= timeout or not closestChest.Parent
-                                if closestChest and closestChest.Parent then
-                                    closestChest:Destroy()
-                                end
+                                until not closestChest.Parent
                                 return true
                             end
                         end
@@ -654,81 +653,24 @@ purplefound = false
     end
 end
 
-local player = game.Players.LocalPlayer
-
-local function getHumanoidRootPart()
-    local char = player.Character or player.CharacterAdded:Wait()
-    return char:FindFirstChild("HumanoidRootPart")
-end
-
-local function BodyVelocity()
-    while true do
-        task.wait(0.1)
-        local humanoidRootPart = getHumanoidRootPart()
-        if humanoidRootPart then
-            local BV = humanoidRootPart:FindFirstChild("BodyVelocity") or Instance.new("BodyVelocity", humanoidRootPart)
-            BV.Velocity = Vector3.new(0, 0.001, 0)
-            BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-        end
-    end
-end
-
-spawn(BodyVelocity)
-
-local function RemoteRunner()
-    while true do
-
-coroutine.wrap(function()
-
-        if workspace:FindFirstChild("__THINGS") then
-            local __THINGS = workspace:FindFirstChild("__THINGS")
-            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-                local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                    local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
-                    if Active:FindFirstChild("AdvancedDigsite") then
-                        local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
-                        if AdvancedDigsite:FindFirstChild("Important") then
-                            local Important = AdvancedDigsite:FindFirstChild("Important")
-                            if Important:FindFirstChild("ActiveBlocks") then
-                                local ActiveBlocks = Important:FindFirstChild("ActiveBlocks")
-                                for _, child in ipairs(ActiveBlocks:GetChildren()) do
-                                    if child.Name == "TargetBlock" then
-                                        local coord = child:GetAttribute("Coord")
-                                        if coord then
-                                            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigBlock", coord)
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-end)()
-        wait()
-    end
-end
-
-spawn(RemoteRunner)
 
 local function startfarm()
-while true do
-    if BucketAmount > 5 then
-        if not teleportToRoyalPurple() then
-            if not teleportToChest() then
-                teleportToRandomRow()
+    coroutine.wrap(function()
+        while true do
+            if BucketAmount > 5 then
+                if teleportToPurple() or teleportToChest() or teleportToRandomRow() then
+                    continue
+                end
+            else
+                if teleportToChest() or teleportToRandomRow() then
+                    continue
+                end
             end
+            wait()
         end
-    else
-        if not teleportToChest() then
-            teleportToRandomRow()
-        end
-    end
-    wait()
+    end)()
 end
-end
+
 spawn(startfarm)
 
 
