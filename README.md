@@ -662,6 +662,16 @@ purplefound = false
     end
 end
 
+spawn(function()
+    setfpscap(80)
+end)
+
+local player = game.Players.LocalPlayer
+
+local function getHumanoidRootPart()
+    local char = player.Character or player.CharacterAdded:Wait()
+    return char:WaitForChild("HumanoidRootPart")
+end
 local function BodyVelocity()
     while true do
         task.wait(0.1)
