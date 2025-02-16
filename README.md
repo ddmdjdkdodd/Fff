@@ -675,8 +675,12 @@ local function startfarm()
 while true do
     if BucketAmount > 3 then
         if not teleportToPurple() then
-            if not teleportToChest() then
+            if BucketAmount > 15 then
                 teleportToRandomRow()
+            else
+                if not teleportToChest() then
+                    teleportToRandomRow()
+                end
             end
         end
     else
@@ -688,6 +692,7 @@ while true do
 end
 end
 spawn(startfarm)
+
 
 local randomWait = math.random(180, 230)
 wait(randomWait)
