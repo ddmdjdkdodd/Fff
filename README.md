@@ -47,7 +47,7 @@
 
 
 
-wait(10)
+wait(7)
 
 if game.PlaceId ~= 8737899170 then
     while true do
