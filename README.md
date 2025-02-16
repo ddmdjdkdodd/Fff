@@ -342,8 +342,9 @@ request({
     Headers = {["Content-Type"] = "application/json"},
     Body = httpService:JSONEncode({content = message})
 })
+MagicBucketAM = 0
         end
-        wait(1)
+        wait(5)
     end
 end
 spawn(convert)
