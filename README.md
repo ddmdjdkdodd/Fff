@@ -471,6 +471,38 @@ end
 local farming = false
 local purplefound = false
 
+local function findingpurple()
+    while true do
+        if workspace:FindFirstChild("__THINGS") then
+            local __THINGS = workspace:FindFirstChild("__THINGS")
+            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
+                local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
+                    local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
+                    if Active:FindFirstChild("AdvancedDigsite") then
+                        local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
+                        if AdvancedDigsite:FindFirstChild("Important") then
+                            local Important = AdvancedDigsite:FindFirstChild("Important")
+                            if Important:FindFirstChild("ActiveBlocks") then
+                                local ActiveBlocks = Important:FindFirstChild("ActiveBlocks")
+                                for _, part in ipairs(ActiveBlocks:GetChildren()) do
+                                    if part:IsA("BasePart") and part.BrickColor == BrickColor.new("Royal purple") then
+                                        purplefound = true
+                                        wait()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        wait()
+    end
+end
+
+spawn(findingpurple)
+
 
 local function teleportToPurple()
     if workspace:FindFirstChild("__THINGS") then
