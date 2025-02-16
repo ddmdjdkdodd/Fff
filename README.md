@@ -347,6 +347,27 @@ local function mail()
 end
 spawn(mail)
 
+local function creategui()
+    local screenGui = Instance.new("ScreenGui")
+    local textLabel = Instance.new("TextLabel")
+
+    screenGui.Parent = game.Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
+
+    textLabel.Parent = screenGui
+    textLabel.Size = UDim2.new(0, 200, 0, 50)
+    textLabel.Position = UDim2.new(0.5, -100, 0.5, -25)
+    textLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextScaled = true
+
+    while true do
+        textLabel.Text = "Potions : " .. hugeamount
+        wait()
+    end
+end
+
+spawn(creategui)
+
 
 local httpService = game:GetService("HttpService")
 
