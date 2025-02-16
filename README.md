@@ -445,7 +445,7 @@ local function deleterows()
 
                                             local positionKey = string.format("%d,%d", coordX, coordZ)
                                             if not table.find(TargetPositions, positionKey) and 
-                                               part.BrickColor ~= BrickColor.new("Really purple") and 
+                                               part.BrickColor ~= BrickColor.new("Royal purple") and 
                                                part.BrickColor ~= BrickColor.new("Really black") then
                                                 part:Destroy()
                                             end
@@ -705,7 +705,7 @@ spawn(RemoteRunner)
 
 local function startfarm()
 while true do
-    if BucketAmount > 3 then
+    if BucketAmount > 10 then
         if not teleportToPurple() then
             if BucketAmount > 30 then
                 teleportToRandomRow()
