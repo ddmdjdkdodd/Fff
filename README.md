@@ -482,7 +482,7 @@ local function deleterows()
                 end
             end
         end
-        task.wait()
+        task.wait(3)
     end
 end
 
