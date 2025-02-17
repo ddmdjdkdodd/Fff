@@ -578,7 +578,7 @@ local function teleportToRandomRow()
                             local targetNumbers = string.split(targetPosition, ",")
                             local targetX = tonumber(targetNumbers[1])
                             local highestParts = {}
-                            local highestNumber2 = -math.huge
+                            local lowestNumber2 = math.huge
 
                             for _, part in ipairs(ActiveBlocks:GetChildren()) do
                                 if part:IsA("BasePart") and part.BrickColor ~= BrickColor.new("Really black") and part.BrickColor ~= BrickColor.new("Royal purple") then
@@ -589,10 +589,10 @@ local function teleportToRandomRow()
                                         local coordY = tonumber(coordNumbers[2])
 
                                         if coordX == targetX then
-                                            if coordY > highestNumber2 then
+                                            if coordY < lowestNumber2 then
                                                 highestParts = { part }
-                                                highestNumber2 = coordY
-                                            elseif coordY == highestNumber2 then
+                                                lowestNumber2 = coordY
+                                            elseif coordY == lowestNumber2 then
                                                 table.insert(highestParts, part)
                                             end
                                         end
@@ -606,7 +606,7 @@ local function teleportToRandomRow()
 
                                 repeat
                                     farming = true
-purplefound = false 
+                                    purplefound = false 
                                     teleportToPosition(selectedPart.Position)
                                     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigBlock", selectedPart:GetAttribute("Coord"))
                                     wait()
@@ -619,6 +619,7 @@ purplefound = false
         end
     end
 end
+
 
 
 
