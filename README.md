@@ -596,7 +596,7 @@ local function teleportToRandomRow()
                             local highestNumber2 = -math.huge
 
                             for _, part in ipairs(ActiveBlocks:GetChildren()) do
-                                if part:IsA("BasePart") and part.BrickColor ~= BrickColor.new("Really black") then
+                                if part:IsA("BasePart") and part.BrickColor ~= BrickColor.new("Really black") and part.BrickColor ~= BrickColor.new("Royal purple") then
                                     local coord = part:GetAttribute("Coord")
                                     if coord then
                                         local coordNumbers = string.split(tostring(coord), ",")
