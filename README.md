@@ -578,6 +578,8 @@ local function teleportToRandomRow()
                             local targetNumbers = string.split(targetPosition, ",")
                             local targetX = tonumber(targetNumbers[1])
                             local highestParts = {}
+                            local lowestParts = {}
+                            local highestNumber2 = -math.huge
                             local lowestNumber2 = math.huge
 
                             for _, part in ipairs(ActiveBlocks:GetChildren()) do
@@ -589,19 +591,32 @@ local function teleportToRandomRow()
                                         local coordY = tonumber(coordNumbers[2])
 
                                         if coordX == targetX then
-                                            if coordY < lowestNumber2 then
+                                            if coordY > highestNumber2 then
                                                 highestParts = { part }
+                                                highestNumber2 = coordY
+                                            elseif coordY == highestNumber2 then
+                                                table.insert(highestParts, part)
+                                            end
+
+                                            if coordY < lowestNumber2 then
+                                                lowestParts = { part }
                                                 lowestNumber2 = coordY
                                             elseif coordY == lowestNumber2 then
-                                                table.insert(highestParts, part)
+                                                table.insert(lowestParts, part)
                                             end
                                         end
                                     end
                                 end
                             end
 
-                            if #highestParts > 0 then
-                                local selectedPart = highestParts[math.random(1, #highestParts)]
+                            local selectedPart
+                            if math.random() <= 0.3 and #lowestParts > 0 then
+                                selectedPart = lowestParts[math.random(1, #lowestParts)]
+                            elseif #highestParts > 0 then
+                                selectedPart = highestParts[math.random(1, #highestParts)]
+                            end
+
+                            if selectedPart then
                                 selectedPart.Name = "TargetBlock"
 
                                 repeat
@@ -619,6 +634,7 @@ local function teleportToRandomRow()
         end
     end
 end
+
 
 
 
