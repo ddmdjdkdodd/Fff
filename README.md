@@ -671,6 +671,7 @@ local function getHumanoidRootPart()
     local char = player.Character or player.CharacterAdded:Wait()
     return char:WaitForChild("HumanoidRootPart")
 end
+
 local function BodyVelocity()
     while true do
         task.wait(0.1)
@@ -686,27 +687,24 @@ end
 spawn(BodyVelocity)
 
 local function startfarm()
-   
-        while true do
-     
-            if BucketAmount > 5 then
-                if not teleportToPurple() then
-                    if not teleportToChest() then
-                        teleportToRandomRow()
-                    end
-                end
-            else
+    while true do
+        if BucketAmount > 5 then
+            if not teleportToPurple() then
                 if not teleportToChest() then
                     teleportToRandomRow()
                 end
             end
-            
-            wait()
+        else
+            if not teleportToChest() then
+                teleportToRandomRow()
+            end
         end
-    
+        wait()
+    end
 end
 
 spawn(startfarm)
+
 
 
 
