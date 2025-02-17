@@ -6,6 +6,21 @@
 
 
 wait(7)
+local counter = 0
+
+spawn(function()
+    while true do
+        counter = counter + 1
+        wait(1)
+    end
+end)
+
+spawn(function()
+    while true do
+        wait(120)
+        print("Counter value:", counter)
+    end
+end)
 
 if game.PlaceId ~= 8737899170 then
     while true do
