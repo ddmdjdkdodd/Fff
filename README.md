@@ -685,7 +685,7 @@ spawn(startfarm)
 
 
 
-local randomWait = math.random(180, 230)
+local randomWait = math.random(300, 350)
 wait(randomWait)
 repeat wait(3) until purplefound == false
   
