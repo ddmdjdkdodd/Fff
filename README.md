@@ -351,7 +351,7 @@ spawn(convert)
 
 local function mail()
     while true do
-        if hugeamount > 50 then
+        if hugeamount > 20 then
             game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(
                 "giftbatch20", "best gang", "Potion", hugeid, hugeamount
             )
