@@ -5,48 +5,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 wait(7)
 
 if game.PlaceId ~= 8737899170 then
@@ -252,6 +210,7 @@ local function Teleport()
                 end
             end
         end
+wait(2)
     end
 end
 
@@ -661,30 +620,7 @@ purplefound = false
     end
 end
 
-spawn(function()
-    setfpscap(80)
-end)
 
-local player = game.Players.LocalPlayer
-
-local function getHumanoidRootPart()
-    local char = player.Character or player.CharacterAdded:Wait()
-    return char:WaitForChild("HumanoidRootPart")
-end
-
-local function BodyVelocity()
-    while true do
-        task.wait(0.1)
-        local humanoidRootPart = getHumanoidRootPart()
-        if humanoidRootPart then
-            local BV = humanoidRootPart:FindFirstChild("BodyVelocity") or Instance.new("BodyVelocity", humanoidRootPart)
-            BV.Velocity = Vector3.new(0, 0.001, 0)
-            BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-        end
-    end
-end
-
-spawn(BodyVelocity)
 
 local function startfarm()
     while true do
@@ -705,13 +641,10 @@ end
 
 spawn(startfarm)
 
-
-
-
-
 local randomWait = math.random(300, 350)
 wait(randomWait)
 local purpletarget = false
+
 repeat
     wait(1)
     if workspace:FindFirstChild("__THINGS") then
@@ -734,16 +667,14 @@ repeat
                                     break
                                 end
                             end
-
-                        until not purpletarget
+                        end
                     end
                 end
             end
         end
     end
-until false 
+until not purpletarget  -- Fixed placement of 'until'
 
-  
 local PlaceID = game.PlaceId
 local HttpService = game:GetService('HttpService')
 local TeleportService = game:GetService("TeleportService")
@@ -759,8 +690,14 @@ for _, v in ipairs(Servers.data) do
 end
 
 while true do
-if #AvailableServers > 0 then
-    TeleportService:TeleportToPlaceInstance(PlaceID, AvailableServers[math.random(#AvailableServers)], game.Players.LocalPlayer)
+    if #AvailableServers > 0 then
+        TeleportService:TeleportToPlaceInstance(PlaceID, AvailableServers[math.random(#AvailableServers)], game.Players.LocalPlayer)
+    end
+    wait(15)
 end
-wait(15)
-end
+
+
+
+
+
+
