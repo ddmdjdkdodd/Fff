@@ -665,6 +665,33 @@ local function BodyVelocity()
 end
 
 spawn(BodyVelocity)
+local function newserver()
+while true do
+wait(500)
+local PlaceID = game.PlaceId
+local HttpService = game:GetService('HttpService')
+local TeleportService = game:GetService("TeleportService")
+local CurrentServerID = game.JobId
+
+local Servers = HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+local AvailableServers = {}
+
+for _, v in ipairs(Servers.data) do
+    if v.id ~= CurrentServerID then
+        table.insert(AvailableServers, v.id)
+    end
+end
+
+while true do
+    if #AvailableServers > 0 then
+        TeleportService:TeleportToPlaceInstance(PlaceID, AvailableServers[math.random(#AvailableServers)], game.Players.LocalPlayer)
+    end
+    wait(15)
+end
+wait(1)
+end
+end
+spawn(newserver)
 
 local randomWait = math.random(300, 350)
 wait(randomWait)
