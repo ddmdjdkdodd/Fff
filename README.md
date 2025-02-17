@@ -173,31 +173,89 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+
+local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-local function waitForChildRecursive(parent, childName)
-    while not parent:FindFirstChild(childName) do
-        parent.ChildAdded:Wait()
+local function Teleport()
+    while true do
+        if Workspace:FindFirstChild("__THINGS") then
+            local __THINGS = Workspace.__THINGS
+            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
+                local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
+                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
+                    local Active = __INSTANCE_CONTAINER.Active
+                    if not Active:FindFirstChild("AdvancedDigsite") then
+                        repeat
+                            if Workspace:FindFirstChild("__THINGS") and
+                               __THINGS:FindFirstChild("Instances") and
+                               __THINGS.Instances:FindFirstChild("AdvancedDigsite") and
+                               __THINGS.Instances.AdvancedDigsite:FindFirstChild("Teleports") and
+                               __THINGS.Instances.AdvancedDigsite.Teleports:FindFirstChild("Enter") then
+
+                                local targetPosition = __THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position
+                                repeat
+                                    wait(1)
+                                    humanoidRootPart.CFrame = CFrame.new(targetPosition + Vector3.new(0, 100, 0))
+                                until (humanoidRootPart.Position - targetPosition).Magnitude <= 300
+
+                                wait(1)
+                                humanoidRootPart.CFrame = CFrame.new(targetPosition)
+                                wait(20)
+                            end
+                        until Active:FindFirstChild("AdvancedDigsite")
+                    end
+
+                    if Active:FindFirstChild("AdvancedDigsite") then
+                        local AdvancedDigsite = Active.AdvancedDigsite
+                        if AdvancedDigsite:FindFirstChild("Important") then
+                            local Important = AdvancedDigsite.Important
+                            if Important:FindFirstChild("ActiveBlocks") then
+                                local ActiveBlocks = Important.ActiveBlocks
+                                local hasBasePart = false
+
+                                for _, part in ipairs(ActiveBlocks:GetChildren()) do
+                                    if part:IsA("BasePart") then
+                                        hasBasePart = true
+                                        break
+                                    end
+                                end
+
+                                if not hasBasePart then
+                                    if Workspace:FindFirstChild("__THINGS") and
+                                       __THINGS:FindFirstChild("Instances") and
+                                       __THINGS.Instances:FindFirstChild("AdvancedDigsite") and
+                                       __THINGS.Instances.AdvancedDigsite:FindFirstChild("Teleports") and
+                                       __THINGS.Instances.AdvancedDigsite.Teleports:FindFirstChild("Leave") then
+
+                                        local targetPosition = __THINGS.Instances.AdvancedDigsite.Teleports.Leave.Position
+                                        repeat
+                                            humanoidRootPart.CFrame = CFrame.new(targetPosition)
+                                            wait(20)
+                                        until (humanoidRootPart.Position - __THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position).Magnitude <= 300
+
+                                        repeat
+                                            local enterPosition = __THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position
+                                            humanoidRootPart.CFrame = CFrame.new(enterPosition)
+                                            wait(20)
+                                        until Active:FindFirstChild("AdvancedDigsite")
+
+                                        wait(1)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
     end
-    return parent[childName]
 end
 
-local things = waitForChildRecursive(Workspace, "__THINGS")
-local instances = waitForChildRecursive(things, "Instances")
-local digsite = waitForChildRecursive(instances, "AdvancedDigsite")
-local teleports = waitForChildRecursive(digsite, "Teleports")
-local enter = waitForChildRecursive(teleports, "Enter")
-
-local targetPosition = enter.Position
-
-repeat
-    humanoidRootPart.CFrame = CFrame.new(targetPosition + Vector3.new(0, 100, 0))
-    wait(0.1)
-until (humanoidRootPart.Position - targetPosition).Magnitude <= 300
-
-wait(0.1)
-humanoidRootPart.CFrame = CFrame.new(targetPosition)
+spawn(Teleport)
 
 
 local Players = game:GetService("Players")
