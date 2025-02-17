@@ -684,7 +684,7 @@ end
 spawn(BodyVelocity)
 local function newserver()
 while true do
-wait(500)
+wait(600)
 local PlaceID = game.PlaceId
 local HttpService = game:GetService('HttpService')
 local TeleportService = game:GetService("TeleportService")
@@ -728,7 +728,7 @@ repeat
                         local Important = AdvancedDigsite.Important
                         if Important:FindFirstChild("ActiveBlocks") then
                             local ActiveBlocks = Important.ActiveBlocks
-                            local foundPurple = false
+                         
 
                             for _, part in ipairs(ActiveBlocks:GetChildren()) do
                                 if part:IsA("BasePart") and part.BrickColor == BrickColor.new("Royal purple") then
