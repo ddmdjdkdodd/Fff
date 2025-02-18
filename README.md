@@ -471,6 +471,7 @@ local function sendinfoooo()
             })
 
             while true do
+            wait(3)
                 local Items = GetItemInfo("Lootbox")
                 for _, Item in pairs(Items) do
                     if string.find(Item.id, "Love Gift") and Item.am >= 1 then
