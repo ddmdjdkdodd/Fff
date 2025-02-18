@@ -515,24 +515,11 @@ local function stop()
             })
 
             wait(3)
-            local Items = GetItemInfo("Lootbox")
-            if Items then
-                for _, Item in pairs(Items) do
-                    if string.find(Item.id, "Love Gift") and Item.am >= 1 then
-                        game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(
-                            "giftbatch20",
-                            "enjoy bro",
-                            "Lootbox",
-                            Item.uid,
-                            Item.am
-                        )
-                    end
-                end
-            end
-            game.Players.LocalPlayer:Kick("FINISHED TOWER, NEW ACCOUNT NEEDED")
-            break
+            
+            
+            
         end
-        wait(1)
+        wait(180)
     end
 end
 
