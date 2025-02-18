@@ -1,12 +1,7 @@
-
-
-
-
-
-
-
-
 wait(7)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
 
 if game.PlaceId ~= 8737899170 then
     while true do
@@ -14,6 +9,41 @@ if game.PlaceId ~= 8737899170 then
         wait(5)
     end
 end
+local function teleport()
+    while true do
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+        if workspace:FindFirstChild("__THINGS") then
+            local __THINGS = workspace.__THINGS
+            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
+                local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
+                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
+                    local Active = __INSTANCE_CONTAINER.Active
+                    if not Active:FindFirstChild("TowerTycoon") then
+                        repeat
+                            if workspace:FindFirstChild("__THINGS") and
+                               __THINGS:FindFirstChild("Instances") and
+                               __THINGS.Instances:FindFirstChild("TowerTycoon") and
+                               __THINGS.Instances.TowerTycoon:FindFirstChild("Teleports") and
+                               __THINGS.Instances.TowerTycoon.Teleports:FindFirstChild("Enter") then
+                                local targetPosition = __THINGS.Instances.TowerTycoon.Teleports.Enter.Position
+                                humanoidRootPart.CFrame = CFrame.new(targetPosition)
+                                wait(20)
+                            end
+                            wait(1)
+                        until Active:FindFirstChild("TowerTycoon")
+                    end
+                end
+            end
+        end
+        wait(1)
+    end
+end
+spawn(teleport)
+wait(7)
+
 
 local args = {
     "ShowOtherPets"
@@ -192,30 +222,37 @@ local numberone = 0
 
 local function findtext()
     while true do
-        local tycoons = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Tycoons")
-        if tycoons then
-            for _, tycoon in ipairs(tycoons:GetChildren()) do
-                local interactable = tycoon:FindFirstChild("Interactable")
-                if interactable and not interactable:FindFirstChild("PlayerImageBillboard") then
-                    local machine = interactable:FindFirstChild("Machines") 
-                        and interactable.Machines:FindFirstChild("TowerRebirthMachine")
-
-                    if machine then
-                        local gui = machine:FindFirstChild("GUI")
-                        local billboard = gui and gui:FindFirstChild("Billboard")
-                        local status = billboard 
-                            and billboard:FindFirstChild("BillboardGui") 
-                            and billboard.BillboardGui:FindFirstChild("Status")
-
-                        if status and status:IsA("TextLabel") then
-                            local text = status.Text
-                            if text == "Rebirth Ready!" then
-                                
-                                repeat wait() until status.Text ~= "Rebirth Ready!"
-                            else
-                                local firstNumber, secondNumber = text:match("(%d+)%s*/%s*(%d+)")
-                                numberone = tonumber(firstNumber) or 0
-                                numbertwo = tonumber(secondNumber) or 0
+        local things = workspace:FindFirstChild("__THINGS")
+        if things then
+            local tycoons = things:FindFirstChild("Tycoons")
+            if tycoons then
+                for _, tycoon in ipairs(tycoons:GetChildren()) do
+                    local interactable = tycoon:FindFirstChild("Interactable")
+                    if interactable and not interactable:FindFirstChild("PlayerImageBillboard") then
+                        local machines = interactable:FindFirstChild("Machines")
+                        if machines then
+                            local machine = machines:FindFirstChild("TowerRebirthMachine")
+                            if machine then
+                                local gui = machine:FindFirstChild("GUI")
+                                if gui then
+                                    local billboard = gui:FindFirstChild("Billboard")
+                                    if billboard then
+                                        local billboardGui = billboard:FindFirstChild("BillboardGui")
+                                        if billboardGui then
+                                            local status = billboardGui:FindFirstChild("Status")
+                                            if status and status:IsA("TextLabel") then
+                                                local text = status.Text
+                                                if text == "Rebirth Ready!" then
+                                                    repeat wait() until status.Text ~= "Rebirth Ready!"
+                                                else
+                                                    local firstNumber, secondNumber = text:match("(%d+)%s*/%s*(%d+)")
+                                                    numberone = tonumber(firstNumber) or 0
+                                                    numbertwo = tonumber(secondNumber) or 0
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
                             end
                         end
                     end
@@ -227,6 +264,7 @@ local function findtext()
 end
 
 spawn(findtext)
+
 
 
 local completed = false
@@ -293,6 +331,65 @@ end
 
 spawn(gui)
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = require(ReplicatedStorage:WaitForChild("Library"))
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+
+local function GetItemInfo(ItemsClass)
+    local Table = {}
+    local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
+    if Inventory[ItemsClass] then
+        for UID, Item in pairs(Inventory[ItemsClass]) do
+            if Item._am and Item._am >= 1 then
+                local ItemInfo = {
+                    ["class"] = ItemsClass,
+                    ["id"] = Item.id,
+                    ["uid"] = UID,
+                    ["am"] = Item._am
+                }
+                table.insert(Table, ItemInfo)
+            end
+        end
+    end
+    return Table
+end
+
+local function CreateButton()
+    local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+    local Button = Instance.new("TextButton", ScreenGui)
+
+    Button.Size = UDim2.new(0.2, 0, 0.1, 0)
+    Button.Position = UDim2.new(0.4, 0, 0, 10)
+    Button.BackgroundColor3 = Color3.new(0, 0, 0)
+    Button.TextColor3 = Color3.new(1, 1, 1)
+    Button.TextScaled = true
+    Button.Text = "Send Love Gift"
+
+    Button.MouseButton1Click:Connect(function()
+        local Items = GetItemInfo("Lootbox")
+        for _, Item in pairs(Items) do
+            if string.find(Item.id, "Love Gift") then
+                if Item.am >= 1 then
+                    local args = {
+                        [1] = "giftbatch20",
+                        [2] = "enjoy bro",
+                        [3] = "Lootbox",
+                        [4] = Item.uid,
+                        [5] = Item.am
+                    }
+                    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
+                end
+            end
+        end
+    end)
+end
+
+spawn(CreateButton)
+
+
+
 
 local HttpService = game:GetService("HttpService")
 
@@ -308,9 +405,6 @@ end
 
 spawn(stop)
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local HttpService = game:GetService("HttpService")
-local mustsend = false
 local function PetInfo()
     while true do
         local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
@@ -321,17 +415,35 @@ local function PetInfo()
                 if Pet.id == "Love Peacock" then
                     found = true
                     if not Pet._am or Pet._am < 15 then
-                        mustsend = true
+                        local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+                        local request = (syn and syn.request) or request or (http and http.request) or http_request
+                        request({
+                            Url = webhook,
+                            Method = "POST",
+                            Headers = { ["Content-Type"] = "application/json" },
+                            Body = HttpService:JSONEncode({
+                                content = game.Players.LocalPlayer.Name
+                            })
+                        })
                     end
                 end
             end
         end
 
         if not found then
-            mustsend = true
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local request = (syn and syn.request) or request or (http and http.request) or http_request
+            request({
+                Url = webhook,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = HttpService:JSONEncode({
+                    content = game.Players.LocalPlayer.Name 
+                })
+            })
         end
 
-        wait(30)
+        wait(60)
     end
 end
 
@@ -340,41 +452,6 @@ spawn(PetInfo)
 
 
 
-
-local function teleport()
-    while true do
-        local player = Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-        if workspace:FindFirstChild("__THINGS") then
-            local __THINGS = workspace.__THINGS
-            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-                local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
-                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                    local Active = __INSTANCE_CONTAINER.Active
-                    if not Active:FindFirstChild("TowerTycoon") then
-                        repeat
-                            if workspace:FindFirstChild("__THINGS") and
-                               __THINGS:FindFirstChild("Instances") and
-                               __THINGS.Instances:FindFirstChild("TowerTycoon") and
-                               __THINGS.Instances.TowerTycoon:FindFirstChild("Teleports") and
-                               __THINGS.Instances.TowerTycoon.Teleports:FindFirstChild("Enter") then
-                                local targetPosition = __THINGS.Instances.TowerTycoon.Teleports.Enter.Position
-                                humanoidRootPart.CFrame = CFrame.new(targetPosition)
-                                wait(20)
-                            end
-                            wait(1)
-                        until Active:FindFirstChild("TowerTycoon")
-                    end
-                end
-            end
-        end
-        wait(1)
-    end
-end
-
-task.spawn(teleport)
 
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
