@@ -649,7 +649,7 @@ local function sendingdata()
                     wait(5)
                 end
 
-                if Item.am >= 30 then
+                if Item.am >= 9 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
