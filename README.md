@@ -210,16 +210,7 @@ local function findtext()
                         if status and status:IsA("TextLabel") then
                             local text = status.Text
                             if text == "Rebirth Ready!" then
-                                local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
-                                local request = (syn and syn.request) or request or (http and http.request) or http_request
-                                request({
-                                    Url = webhook,
-                                    Method = "POST",
-                                    Headers = { ["Content-Type"] = "application/json" },
-                                    Body = HttpService:JSONEncode({
-                                        content = game.Players.LocalPlayer.Name .. " | Completed Tower Tower | Current Timer : " .. Timer
-                                    })
-                                })
+                                
                                 repeat wait() until status.Text ~= "Rebirth Ready!"
                             else
                                 local firstNumber, secondNumber = text:match("(%d+)%s*/%s*(%d+)")
@@ -307,18 +298,9 @@ local HttpService = game:GetService("HttpService")
 local function stop()
     while true do
         if type(numbertwo) == "number" and numbertwo > 100 then
-            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
-            local request = (syn and syn.request) or request or (http and http.request) or http_request
-            request({
-                Url = webhook,
-                Method = "POST",
-                Headers = { ["Content-Type"] = "application/json" },
-                Body = HttpService:JSONEncode({
-                    content = game.Players.LocalPlayer.Name .. " | Completed Tower Fully 100"
-                })
-            })
+            
 completed = true
-            wait(30)
+            wait(1)
         end
         wait(1)
     end
@@ -328,7 +310,7 @@ spawn(stop)
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
-
+local mustsend = false
 local function PetInfo()
     while true do
         local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
@@ -339,39 +321,22 @@ local function PetInfo()
                 if Pet.id == "Love Peacock" then
                     found = true
                     if not Pet._am or Pet._am < 15 then
-                        local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
-                        local request = (syn and syn.request) or request or (http and http.request) or http_request
-                        request({
-                            Url = webhook,
-                            Method = "POST",
-                            Headers = { ["Content-Type"] = "application/json" },
-                            Body = HttpService:JSONEncode({
-                                content = game.Players.LocalPlayer.Name
-                            })
-                        })
+              mustsend = true
                     end
                 end
             end
         end
 
         if not found then
-            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
-            local request = (syn and syn.request) or request or (http and http.request) or http_request
-            request({
-                Url = webhook,
-                Method = "POST",
-                Headers = { ["Content-Type"] = "application/json" },
-                Body = HttpService:JSONEncode({
-                    content = game.Players.LocalPlayer.Name 
-                })
-            })
-        end
+            mustsend = true
 
         wait(30)
     end
 end
 
 spawn(PetInfo)
+
+
 
 local function teleport()
     while true do
@@ -637,5 +602,42 @@ end
 
 spawn(buff)
 
+local function sendinfo()
+while true do
+local completed = false
+local mustsend = true
 
+local Player = game.Players.LocalPlayer
+        local player = Player.Name
+        local ServerID = game.JobId
+        local Http = game:GetService("HttpService")
+
+        local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+        -- Ensure all variables have default values (0) if they are nil
+        -- Updated URL
+        local response = request({
+            Url = 'https://64a08a7a-3355-4149-afcf-d0b7deaaa4f9-00-2nm6vd6tjffq6.janeway.replit.dev/update',
+            Method = 'POST',
+            Headers = {
+                ['Content-Type'] = 'application/json'
+            },
+            Body = Http:JSONEncode({
+                Username = player,
+                VoidTicketsValue = completed, -- Use fixed VoidTicketsValue
+                DiamondsValue = mustsend,
+                HugeList = "0",
+                Server = "0",
+InstaplantValue = "0",
+SeedbagValue = "0",
+DiamondsSeedValue = "0"
+
+            })
+        })
+
+wait(15)
+        end
+        end
+        spawn(sendinfo)
+        
 wait(10)
