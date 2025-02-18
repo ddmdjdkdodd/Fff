@@ -900,7 +900,14 @@ local function egg()
                                         value = math.min(math.floor(amount / 250), 20)
                                     end
 
-                                    game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, tonumber(value))
+                                    if value > 0 then
+                                        local success = pcall(function()
+                                            game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, tonumber(value))
+                                        end)
+                                        if not success then
+                                            game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, 1)
+                                        end
+                                    end
                                     break
                                 end
                             end
@@ -915,4 +922,3 @@ local function egg()
 end
 
 spawn(egg)
-
