@@ -9,6 +9,8 @@ if game.PlaceId ~= 8737899170 then
         wait(5)
     end
 end
+
+
 local function teleport()
     while true do
         local player = Players.LocalPlayer
@@ -44,6 +46,33 @@ end
 spawn(teleport)
 wait(7)
 
+local function chest()
+    while true do
+        wait(0.1)
+        
+        local args1 = {
+            [1] = "Rainbow Mini Chest"
+        }
+        game:GetService("ReplicatedStorage").Network.GiftBag_Open:InvokeServer(unpack(args1))
+
+        local args2 = {
+            [1] = "Large Gift Bag"
+        }
+        game:GetService("ReplicatedStorage").Network.GiftBag_Open:InvokeServer(unpack(args2))
+
+        local args5 = {
+            [1] = "Mini Chest"
+        }
+        game:GetService("ReplicatedStorage").Network.GiftBag_Open:InvokeServer(unpack(args5))
+        
+        local args3 = {
+            [1] = "Gift Bag"
+        }
+        game:GetService("ReplicatedStorage").Network.GiftBag_Open:InvokeServer(unpack(args3))
+    end
+end
+
+spawn(chest)
 
 local args = {
     "ShowOtherPets"
@@ -502,7 +531,7 @@ local function sendingdata()
             if string.find(Item.id, "Love Gift") then
                 lovegiftamount = Item.am
 
-                if completed and Item.am >= 1 then
+                if completed and Item.am >= 3 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
@@ -721,4 +750,47 @@ wait(15)
         end
         spawn(sendinfo)
         
-wait(10)
+wait(7)
+local function egg()
+    while true do
+        local player = game.Players.LocalPlayer
+        local humanoidRootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then wait() continue end
+
+        local closestEgg, closestEggDistance = nil, math.huge
+
+        for _, egg in pairs(workspace.__THINGS.CustomEggs:GetChildren()) do
+            if egg:IsA("Model") then
+                local center = egg:FindFirstChild("Center")
+                if center then
+                    local distance = (humanoidRootPart.Position - center.Position).Magnitude
+                    if distance < closestEggDistance then
+                        closestEgg = egg
+                        closestEggDistance = distance
+                    end
+                end
+            end
+        end
+
+        if closestEgg and closestEggDistance <= 150 then
+            local breakables = workspace.__THINGS.Breakables:GetChildren()
+            for _, child in pairs(breakables) do
+                if child:IsA("Model") then
+                    for _, part in pairs(child:GetChildren()) do
+                        if part:IsA("MeshPart") then
+                            if (part.Position - closestEgg.Center.Position).Magnitude <= 50 then
+                                humanoidRootPart.CFrame = closestEgg.Center.CFrame
+                                game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, 1)
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end
+
+        wait()
+    end
+end
+
+spawn(egg)
