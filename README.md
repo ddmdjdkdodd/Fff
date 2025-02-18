@@ -789,7 +789,7 @@ local function Enchant()
     while true do
         local Items = GetItemInfo("Enchant")
         for _, Item in pairs(Items) do
-            if string.find(Item.id, "Tap Power") or string.find(Item.id, "Strong Pets") then
+            if string.find(Item.id, "Critical Power") then
                 local args = {
                     Item.uid
                 }
@@ -883,11 +883,26 @@ local function egg()
             for _, child in pairs(breakables) do
                 if child:IsA("Model") then
                     for _, part in pairs(child:GetChildren()) do
-                        if part:IsA("MeshPart") then
-                            if (part.Position - closestEgg.Center.Position).Magnitude <= 50 then
-                                humanoidRootPart.CFrame = closestEgg.Center.CFrame
-                                game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, 1)
-                                break
+                        if part:IsA("MeshPart") and (part.Position - closestEgg.Center.Position).Magnitude <= 50 then
+                            humanoidRootPart.CFrame = closestEgg.Center.CFrame
+                            
+                            local Items = GetItemInfo("Currency")
+                            for _, Item in pairs(Items) do
+                                if string.find(Item.id, "ValentinesCoins") then
+                                    local amount = Item.am
+                                    local value = 1
+
+                                    if amount > 250 and amount <= 500 then
+                                        value = 1
+                                    elseif amount > 500 and amount <= 750 then
+                                        value = 2
+                                    else
+                                        value = math.min(math.floor(amount / 250), 20)
+                                    end
+
+                                    game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, tonumber(value))
+                                    break
+                                end
                             end
                         end
                     end
@@ -900,3 +915,4 @@ local function egg()
 end
 
 spawn(egg)
+
