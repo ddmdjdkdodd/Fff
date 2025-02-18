@@ -297,7 +297,6 @@ spawn(findtext)
 
 
 local completed = false
-
 local player = game.Players.LocalPlayer
 local playerGui = player:FindFirstChildOfClass("PlayerGui")
 local lovegiftamount = 0
@@ -321,8 +320,22 @@ textLabel.TextColor3 = Color3.new(1, 1, 1)
 textLabel.TextScaled = true
 textLabel.Font = Enum.Font.SourceSansBold
 
+local function rejoinServer()
+    local TeleportService = game:GetService("TeleportService")
+    TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
+end
+
 local function gui()
     while true do
+        local startTime = tick()
+
+        while textLabel.Text == "Loading..." do
+            if tick() - startTime >= 25 then
+                rejoinServer()
+            end
+            wait(1)
+        end
+
         if completed then
             local rainbowGui = screenGui:FindFirstChild("RainbowGui") or Instance.new("Frame", screenGui)
             rainbowGui.Name = "RainbowGui"
@@ -333,7 +346,7 @@ local function gui()
             local completedText = rainbowGui:FindFirstChild("CompletedText") or Instance.new("TextLabel", rainbowGui)
             completedText.Name = "CompletedText"
             completedText.Size = UDim2.new(1, 0, 0.2, 0)
-            completedText.Position = UDim2.new(0, 0, 0.4, 0)
+            completedText.Position = UDim2.new(0, 0, 0, 0.4)
             completedText.BackgroundTransparency = 1
             completedText.TextColor3 = Color3.new(0, 0, 0)
             completedText.TextScaled = true
@@ -359,6 +372,8 @@ local function gui()
 end
 
 spawn(gui)
+
+
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -418,6 +433,26 @@ end
 spawn(CreateButton)
 
 
+local function sendinfoooo()
+    local sent = false
+    while true do
+        if completed == true and not sent then
+            sent = true
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local request = (syn and syn.request) or request or (http and http.request) or http_request
+            request({
+                Url = webhook,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = HttpService:JSONEncode({
+                    content = game.Players.LocalPlayer.Name .. " | Completed Tower "
+                })
+            })
+        end
+        wait(60)
+    end
+end
+spawn(sendinfoooo)
 
 
 local HttpService = game:GetService("HttpService")
@@ -426,6 +461,7 @@ local function stop()
     while true do
         if type(numbertwo) == "number" and numbertwo > 100 then
             completed = true
+            
             wait(1)
         end
         wait(1)
@@ -433,6 +469,8 @@ local function stop()
 end
 
 spawn(stop)
+
+
 
 local function PetInfo()
     while true do
@@ -476,7 +514,7 @@ local function PetInfo()
     end
 end
 
-spawn(PetInfo)
+
 
 
 
