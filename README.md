@@ -344,17 +344,27 @@ local function rejoinServer()
     local TeleportService = game:GetService("TeleportService")
     TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
 end
+local started = false
+local checkkk = false
+local function startcheck()
+if started == false then 
+started = true
+wait(60) 
+if checkkk == false then 
+rejoinServer()
+end
+
+end
+end
 
 local function gui()
     while true do
         local startTime = tick()
-
-        while textLabel.Text == "Loading..." do
-            if tick() - startTime >= 60 then
-                rejoinServer()
-            end
-            wait(1)
+ 
+        if textLabel.Text == "Loading..." then
+spawn(startcheck)
         end
+           
 
         if completed then
             local rainbowGui = screenGui:FindFirstChild("RainbowGui") or Instance.new("Frame", screenGui)
@@ -380,10 +390,12 @@ local function gui()
 
             rainbowGui:Destroy()
         else
+        checkkk = true
             if type(numberone) == "number" and type(numbertwo) == "number" and numbertwo > 0 then
                 local percentage = math.floor((numberone / numbertwo) * 100)
                 textLabel.Text = numbertwo .. " : Complete Percentage : " .. percentage .. "%\nLove Gifts : " .. lovegiftamount
             else
+            checkkk = false
                 textLabel.Text = "Loading..."
             end
         end
