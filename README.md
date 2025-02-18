@@ -789,7 +789,7 @@ local function Enchant()
     while true do
         local Items = GetItemInfo("Enchant")
         for _, Item in pairs(Items) do
-            if string.find(Item.id, "Critical Power") then
+            if string.find(Item.id, "Criticals") then
                 local args = {
                     Item.uid
                 }
