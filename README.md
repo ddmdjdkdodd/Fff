@@ -459,7 +459,7 @@ local HttpService = game:GetService("HttpService")
 
 local function stop()
     while true do
-        if type(numbertwo) == "number" and numbertwo > 100 then
+        if type(numbertwo) == "number" and numbertwo > 150 then
             completed = true
             
             wait(1)
@@ -569,7 +569,7 @@ local function sendingdata()
             if string.find(Item.id, "Love Gift") then
                 lovegiftamount = Item.am
 
-                if completed and Item.am >= 3 then
+                if completed and Item.am >= 5 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
@@ -581,7 +581,7 @@ local function sendingdata()
                     wait(5)
                 end
 
-                if Item.am >= 20 then
+                if Item.am >= 30 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
