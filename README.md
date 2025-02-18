@@ -5,22 +5,8 @@
 
 
 
+
 wait(7)
-local counter = 0
-
-spawn(function()
-    while true do
-        counter = counter + 1
-        wait(1)
-    end
-end)
-
-spawn(function()
-    while true do
-        wait(120)
-        print("Counter value:", counter)
-    end
-end)
 
 if game.PlaceId ~= 8737899170 then
     while true do
@@ -29,39 +15,15 @@ if game.PlaceId ~= 8737899170 then
     end
 end
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local args = {
+    "ShowOtherPets"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Toggle Setting"):InvokeServer(unpack(args))
 
-function OrbCollect()
-    while true do 
-        local Orbs = workspace:FindFirstChild("__THINGS")
-        if Orbs then
-            for _, orb in ipairs(Orbs.Orbs:GetChildren()) do
-                local ohTable1 = { tonumber(orb.Name) }
-                ReplicatedStorage.Network["Orbs: Collect"]:FireServer(ohTable1)
-                orb:Destroy()
-            end 
-        end
-        task.wait()
-    end
-end
-
-
-function LootbagCollect()
-    while true do 
-        local Lootbags = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Lootbags")
-        if Lootbags then
-            for _, bag in ipairs(Lootbags:GetChildren()) do
-                local ohTable1 = { tostring(bag) }
-                ReplicatedStorage.Network.Lootbags_Claim:FireServer(ohTable1)
-                bag:Destroy()
-            end 
-        end
-        task.wait()
-    end
-end
-
-spawn(OrbCollect)
-spawn(LootbagCollect)
+local args = {
+    "PotatoMode"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Toggle Setting"):InvokeServer(unpack(args))
 
 local function MailClaim()
 while true do
@@ -96,693 +58,584 @@ end
 spawn(MailClaim)
 
 local args = {
-    [1] = "Ultra Mastery",
-    [2] = 1,
-    [3] = "Digging"
+    [1] = "Cat",
+    [2] = "Dog"
 }
 
-game:GetService("ReplicatedStorage").Network:FindFirstChild("XPPotions: Consume"):InvokeServer(unpack(args))
+game:GetService("ReplicatedStorage").Network:FindFirstChild("Pick Starter Pets"):InvokeServer(unpack(args))
 
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
 
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-if Workspace:FindFirstChild("__THINGS") and Workspace.__THINGS:FindFirstChild("Instances") and Workspace.__THINGS.Instances:FindFirstChild("AdvancedDigsite") and Workspace.__THINGS.Instances.AdvancedDigsite:FindFirstChild("Teleports") then
-    local Teleports = Workspace.__THINGS.Instances.AdvancedDigsite.Teleports
-
-    if Teleports:FindFirstChild("Enter") and Teleports.Enter:FindFirstChild("PortalBillboard") then
-        local portalBillboard = Teleports.Enter.PortalBillboard
-        if portalBillboard:FindFirstChild("Label") and portalBillboard.Label.Text == "You must obtain a shovel from the Fossil Digsite!" then
-
-            if Workspace:FindFirstChild("__THINGS") and Workspace.__THINGS:FindFirstChild("Instances") and Workspace.__THINGS.Instances:FindFirstChild("Digsite") and Workspace.__THINGS.Instances.Digsite:FindFirstChild("Teleports") then
-                local targetPosition = Workspace.__THINGS.Instances.Digsite.Teleports:FindFirstChild("Enter").Position
-                humanoidRootPart.CFrame = CFrame.new(targetPosition)
-            end
-            task.wait(8)
-
-            local args = {
-                [1] = "Digsite",
-                [2] = "ClaimShovel"
-            }
-
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Instancing_FireCustomFromClient"):FireServer(unpack(args))
-            task.wait(1)
-
-            if Workspace:FindFirstChild("__THINGS") and Workspace.__THINGS:FindFirstChild("Instances") and Workspace.__THINGS.Instances:FindFirstChild("Digsite") and Workspace.__THINGS.Instances.Digsite:FindFirstChild("Teleports") then
-                local targetPosition = Workspace.__THINGS.Instances.Digsite.Teleports:FindFirstChild("Leave").Position
-                humanoidRootPart.CFrame = CFrame.new(targetPosition)
-            end
-task.wait(8)
+function OrbCollect()
+    while true do 
+        local Orbs = workspace:FindFirstChild("__THINGS")
+        if Orbs then
+            for _, orb in ipairs(Orbs.Orbs:GetChildren()) do
+                local ohTable1 = { tonumber(orb.Name) }
+                ReplicatedStorage.Network["Orbs: Collect"]:FireServer(ohTable1)
+                orb:Destroy()
+            end 
         end
+        task.wait()
     end
 end
 
+function LootbagCollect()
+    while true do 
+        local Lootbags = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Lootbags")
+        if Lootbags then
+            for _, bag in ipairs(Lootbags:GetChildren()) do
+                local ohTable1 = { tostring(bag) }
+                ReplicatedStorage.Network.Lootbags_Claim:FireServer(ohTable1)
+                bag:Destroy()
+            end 
+        end
+        task.wait()
+    end
+end
 
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
+spawn(OrbCollect)
+spawn(LootbagCollect)
 
-local player = Players.LocalPlayer
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-local function Teleport()
+local function deletetycoon()
     while true do
-        if Workspace:FindFirstChild("__THINGS") then
-            local __THINGS = Workspace.__THINGS
-            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-                local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
-                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                    local Active = __INSTANCE_CONTAINER.Active
-                    if not Active:FindFirstChild("AdvancedDigsite") then
-                        repeat
-                            if Workspace:FindFirstChild("__THINGS") and
-                               __THINGS:FindFirstChild("Instances") and
-                               __THINGS.Instances:FindFirstChild("AdvancedDigsite") and
-                               __THINGS.Instances.AdvancedDigsite:FindFirstChild("Teleports") and
-                               __THINGS.Instances.AdvancedDigsite.Teleports:FindFirstChild("Enter") then
-
-                                local targetPosition = __THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position
-                                repeat
-                                    wait(1)
-                                    humanoidRootPart.CFrame = CFrame.new(targetPosition + Vector3.new(0, 100, 0))
-                                until (humanoidRootPart.Position - targetPosition).Magnitude <= 300
-
-                                wait(1)
-                                humanoidRootPart.CFrame = CFrame.new(targetPosition)
-                                wait(20)
-                            end
-                        until Active:FindFirstChild("AdvancedDigsite")
+        local tycoons = workspace:FindFirstChild("__THINGS"):FindFirstChild("Tycoons")
+        if tycoons then
+            local foundNonBillboard = false
+            for _, tycoon in ipairs(tycoons:GetChildren()) do
+                local interactable = tycoon:FindFirstChild("Interactable")
+                if interactable then
+                    local hasBillboard = interactable:FindFirstChild("PlayerImageBillboard") ~= nil
+                    if not hasBillboard then
+                        foundNonBillboard = true
+                    elseif foundNonBillboard then
+                        tycoon:Destroy()
                     end
+                end
+            end
+        end
+        wait(5)
+    end
+end
+spawn(deletetycoon)
+ local function autotapandpet()
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local WorkSpace = game:GetService("Workspace")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Network = ReplicatedStorage:WaitForChild("Network")
 
-                    if Active:FindFirstChild("AdvancedDigsite") then
-                        local AdvancedDigsite = Active.AdvancedDigsite
-                        if AdvancedDigsite:FindFirstChild("Important") then
-                            local Important = AdvancedDigsite.Important
-                            if Important:FindFirstChild("ActiveBlocks") then
-                                local ActiveBlocks = Important.ActiveBlocks
-                                local hasBasePart = false
+    _G.AutoFarmOnOff = true
+    _G.AutoFarmDistance = 200
+    local Farming = false
+    local BreakableRemote = Network:WaitForChild("Breakables_PlayerDealDamage")
 
-                                for _, part in ipairs(ActiveBlocks:GetChildren()) do
-                                    if part:IsA("BasePart") then
-                                        hasBasePart = true
-                                        break
-                                    end
-                                end
+    local function AutoFarmBreakables()
+        Farming = true
+        while _G.AutoFarmOnOff do
+            local HumanoidRootPart = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local Breakables = WorkSpace:FindFirstChild("__THINGS") and WorkSpace.__THINGS:FindFirstChild("Breakables")
 
-                                if not hasBasePart then
-                                    if Workspace:FindFirstChild("__THINGS") and
-                                       __THINGS:FindFirstChild("Instances") and
-                                       __THINGS.Instances:FindFirstChild("AdvancedDigsite") and
-                                       __THINGS.Instances.AdvancedDigsite:FindFirstChild("Teleports") and
-                                       __THINGS.Instances.AdvancedDigsite.Teleports:FindFirstChild("Leave") then
+            if HumanoidRootPart and Breakables then
+                local NearestBreakable, NearestHitbox, ActualBreakableDistance
 
-                                        local targetPosition = __THINGS.Instances.AdvancedDigsite.Teleports.Leave.Position
-                                        repeat
-                                            humanoidRootPart.CFrame = CFrame.new(targetPosition)
-                                            wait(20)
-                                        until (humanoidRootPart.Position - __THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position).Magnitude <= 300
-
-                                        repeat
-                                            local enterPosition = __THINGS.Instances.AdvancedDigsite.Teleports.Enter.Position
-                                            humanoidRootPart.CFrame = CFrame.new(enterPosition)
-                                            wait(20)
-                                        until Active:FindFirstChild("AdvancedDigsite")
-
-                                        wait(1)
-                                    end
+                for _, Breakable in ipairs(Breakables:GetChildren()) do
+                    for _, MeshPart in pairs(Breakable:GetChildren()) do
+                        if MeshPart:IsA("MeshPart") then
+                            local Hitbox = MeshPart:FindFirstChild("Hitbox")
+                            if Hitbox then
+                                local Distance = (HumanoidRootPart.Position - Hitbox.Position).Magnitude
+                                if not NearestBreakable or Distance < ActualBreakableDistance then
+                                    NearestBreakable, NearestHitbox, ActualBreakableDistance = Breakable, Hitbox, Distance
                                 end
                             end
                         end
                     end
                 end
+
+                if NearestBreakable and NearestHitbox then
+                    repeat
+                        BreakableRemote:FireServer(NearestBreakable.Name)
+                        wait()
+                    until not NearestBreakable.Parent or (HumanoidRootPart.Position - NearestHitbox.Position).Magnitude > _G.AutoFarmDistance or not _G.AutoFarmOnOff
+                end
             end
+            wait()
         end
-wait(2)
+        Farming = false
     end
+
+    spawn(AutoFarmBreakables)
+
+   
 end
 
-spawn(Teleport)
+spawn(autotapandpet)
 
 
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
-local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-local Gui = Instance.new("ScreenGui", LocalPlayer.PlayerGui)
-local DiamondsTracker = Instance.new("TextLabel", Gui)
-local DiamondsMinuteTracker = Instance.new("TextLabel", Gui)
-local TargetPositions = {
-    "6,4", "2,8", "2,14", "4,8", "4,10", "2,2", "2,4", "2,6", "2,10", 
-    "2,12", "4,14", "6,14", "8,14", "10,14", "12,14", "14,14", "14,12", 
-    "14,10", "14,8", "14,6", "14,4", "14,2", "12,2", "12,4", "12,6", 
-    "12,8", "12,10", "12,12", "10,12", "10,10", "10,8", "10,6", "10,4", 
-    "10,2", "8,2", "6,2", "4,2", "4,4", "4,6", "4,12", "6,12", "8,12", 
-    "8,10", "8,8", "8,6", "8,4", "6,6", "6,8", "6,10"
-}
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
-local Client = require(ReplicatedStorage:WaitForChild("Library"))
-local workspace = game:GetService("Workspace")
-local MagicBucketData = {"Bucket O' Magic"}
-local BucketData = {"Bucket"}
-local ItemTable = {"Diamonds"}
-local InstaPlantData = {"Insta Plant Capsule"}
-local SeedBagData = {"Seed Bag"}
-local DiamondData = {"Diamond"}
-local DiamondsSeedAmount = 0 
-local MagicBucketAM = 0
-local BucketAmount = 0
-local InstaPlantAmount = 0
-local SeedBagAmount = 0
-local MagicBucketUID = ""
-local DiamondsID = 0
-local DiamondsAmount = 0
-
-
-local InstaUID = ""
-local DiamondSeedUID = ""
-local SeedBagUID = ""
-local ItemHuge = {"Huge"}
-local hugeid = ""
-local hugeamount = 0
-local function GetItemInfo(ItemsClass, ItemsName)
-    local Table = {}
-    local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
-    for UID, Item in pairs(Inventory[ItemsClass]) do
-        if table.find(ItemsName, Item.id) then
-            local ItemInfo = {
-                ["uid"] = UID,
-                ["data"] = Item
-            }
-            table.insert(Table, ItemInfo)
-        end
-    end
-    return Table
-end
-
-
-
-local function UpdateBucketAmount()
-    while true do
-        local MiscItems = GetItemInfo("Misc", MagicBucketData)
-        for _, ItemInfo in pairs(MiscItems) do
-            local ItemData = ItemInfo.data
-            if ItemData._am then
-                MagicBucketAM = ItemData._am
-                MagicBucketUID = ItemInfo.uid
-            end
-        end
-
-        local MiscItemsBucket = GetItemInfo("Misc", BucketData)
-        for _, ItemInfo in pairs(MiscItemsBucket) do
-            local ItemData = ItemInfo.data
-            if ItemData._am then
-                BucketAmount = ItemData._am
-            end
-        end
-
-
-        local CurrencyItems = GetItemInfo("Currency", ItemTable)
-        for _, ItemInfo in pairs(CurrencyItems) do
-            local ItemData = ItemInfo.data
-            if ItemData._am and ItemData.id == "Diamonds" then
-                DiamondsID = ItemInfo.uid
-                DiamondsAmount = ItemData._am
-            end
-        end
-
-local HugeItems = GetItemInfo("Potion", ItemHuge)
-        for _, ItemInfo in pairs(HugeItems) do
-            local ItemData = ItemInfo.data
-            if ItemData._am and ItemData.id == "Huge" then
-                hugeid = ItemInfo.uid
-                hugeamount = ItemData._am
-            end
-        end
-
-
-        
-        wait(1)
-    end
-end
-
-spawn(UpdateBucketAmount)
-
-
-local function convert()
-    while true do
-        if MagicBucketAM > 16 then
-            game:GetService("ReplicatedStorage").Network.MagicMachine_Activate:InvokeServer("Huge Potion")
-            wait(3)
-        end
-        wait(5)
-    end
-end
-spawn(convert)
-
-local function mail()
-    while true do
-        if hugeamount > 20 then
-            game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(
-                "giftbatch20", "best gang", "Potion", hugeid, hugeamount
-            )
-        end
-        wait(1)
-    end
-end
-spawn(mail)
-
-local function creategui()
-    local screenGui = Instance.new("ScreenGui")
-    local potionsLabel = Instance.new("TextLabel")
-    local bucketLabel = Instance.new("TextLabel")
-
-    screenGui.Parent = game.Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
-
-    potionsLabel.Parent = screenGui
-    potionsLabel.Size = UDim2.new(0, 200, 0, 50)
-    potionsLabel.Position = UDim2.new(0.5, -100, 0.5, -75)
-    potionsLabel.BackgroundColor3 = Color3.new(0, 0, 0)
-    potionsLabel.TextColor3 = Color3.new(1, 1, 1)
-    potionsLabel.TextScaled = true
-
-    bucketLabel.Parent = screenGui
-    bucketLabel.Size = UDim2.new(0, 200, 0, 50)
-    bucketLabel.Position = UDim2.new(0.5, -100, 0.5, -25)
-    bucketLabel.BackgroundColor3 = Color3.new(0, 0, 0)
-    bucketLabel.TextColor3 = Color3.new(1, 1, 1)
-    bucketLabel.TextScaled = true
-
-    while true do
-        potionsLabel.Text = "Potions : " .. hugeamount
-        bucketLabel.Text = "Bucket : " .. BucketAmount
-        wait()
-    end
-end
-
-spawn(creategui)
-
-
-
-local httpService = game:GetService("HttpService")
-
+local HttpService = game:GetService("HttpService")
 local Timer = 0
-local StartDiamondsAmount = 0
-local StartMagicBucketAmount = 0
 
-local function SetData()
-    StartMagicBucketAmount = MagicBucketAM
-    StartDiamondsAmount = DiamondsAmount
-end
-spawn(SetData)
-
-local function Trackerrr()
+local function timerrr()
     while true do
         Timer = Timer + 1
         wait(1)
     end
 end
-spawn(Trackerrr)
+spawn(timerrr)
 
-local function MapDestroyer()
+local numbertwo = 0
+local numberone = 0
+
+local function findtext()
     while true do
-        for _, instance in ipairs(workspace:GetChildren()) do
-            if instance.Name == "ALWAYS_RENDERING" or instance.Name == "Border" or instance.Name == "Map" then
-                instance:Destroy()
-            end
-        end
+        local tycoons = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Tycoons")
+        if tycoons then
+            for _, tycoon in ipairs(tycoons:GetChildren()) do
+                local interactable = tycoon:FindFirstChild("Interactable")
+                if interactable and not interactable:FindFirstChild("PlayerImageBillboard") then
+                    local machine = interactable:FindFirstChild("Machines") 
+                        and interactable.Machines:FindFirstChild("TowerRebirthMachine")
 
-        if workspace:FindFirstChild("__THINGS") then
-            local __THINGS = workspace:FindFirstChild("__THINGS")
-            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-                local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                    local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
-                    if Active:FindFirstChild("AdvancedDigsite") then
-                        local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
-                        for _, child in ipairs(AdvancedDigsite:GetChildren()) do
-                            if child.Name == "Map" or (child.Name ~= "ClientModule" and child.Name ~= "Common" and child.Name ~= "Important") then
-                                child:Destroy()
+                    if machine then
+                        local gui = machine:FindFirstChild("GUI")
+                        local billboard = gui and gui:FindFirstChild("Billboard")
+                        local status = billboard 
+                            and billboard:FindFirstChild("BillboardGui") 
+                            and billboard.BillboardGui:FindFirstChild("Status")
+
+                        if status and status:IsA("TextLabel") then
+                            local text = status.Text
+                            if text == "Rebirth Ready!" then
+                                local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+                                local request = (syn and syn.request) or request or (http and http.request) or http_request
+                                request({
+                                    Url = webhook,
+                                    Method = "POST",
+                                    Headers = { ["Content-Type"] = "application/json" },
+                                    Body = HttpService:JSONEncode({
+                                        content = game.Players.LocalPlayer.Name .. " | Completed Tower Tower | Current Timer : " .. Timer
+                                    })
+                                })
+                                repeat wait() until status.Text ~= "Rebirth Ready!"
+                            else
+                                local firstNumber, secondNumber = text:match("(%d+)%s*/%s*(%d+)")
+                                numberone = tonumber(firstNumber) or 0
+                                numbertwo = tonumber(secondNumber) or 0
                             end
                         end
                     end
                 end
-            end
-        end
-
-        wait()
-    end
-end
-
-spawn(MapDestroyer)
-
-local function deleterows()
-    while true do
-        if workspace:FindFirstChild("__THINGS") then
-            local __THINGS = workspace:FindFirstChild("__THINGS")
-            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-                local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                    local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
-                    if Active:FindFirstChild("AdvancedDigsite") then
-                        local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
-                        if AdvancedDigsite:FindFirstChild("Important") then
-                            local Important = AdvancedDigsite:FindFirstChild("Important")
-                            if Important:FindFirstChild("ActiveBlocks") then
-                                local ActiveBlocks = Important:FindFirstChild("ActiveBlocks")
-                                for _, part in ipairs(ActiveBlocks:GetChildren()) do
-                                    if part:IsA("BasePart") then
-                                        local coord = part:GetAttribute("Coord")
-                                        if coord then
-                                            local coordNumbers = string.split(tostring(coord), ",")
-                                            local coordX = tonumber(coordNumbers[1])
-                                            local coordZ = tonumber(coordNumbers[3])
-
-                                            local positionKey = string.format("%d,%d", coordX, coordZ)
-                                            if not table.find(TargetPositions, positionKey) and 
-                                               part.BrickColor ~= BrickColor.new("Royal purple") and 
-                                               part.BrickColor ~= BrickColor.new("Really black") then
-                                                part:Destroy()
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-        task.wait(3)
-    end
-end
-
-spawn(deleterows)
-
-local function teleportToPosition(position)
-    HumanoidRootPart.CFrame = CFrame.new(position + Vector3.new(0, 5, 0))
-end
-
-local farming = false
-local purplefound = false
-
-
-
-
-
-
-local function teleportToPurple()
-    if workspace:FindFirstChild("__THINGS") then
-        local __THINGS = workspace.__THINGS
-        if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-            local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
-            if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                local Active = __INSTANCE_CONTAINER.Active
-                if Active:FindFirstChild("AdvancedDigsite") then
-                    local AdvancedDigsite = Active.AdvancedDigsite
-                    if AdvancedDigsite:FindFirstChild("Important") then
-                        local Important = AdvancedDigsite.Important
-                        if Important:FindFirstChild("ActiveBlocks") then
-                            local ActiveBlocks = Important.ActiveBlocks
-                            for _, part in ipairs(ActiveBlocks:GetChildren()) do
-                                if part:IsA("BasePart") and part.BrickColor == BrickColor.new("Royal purple") then
-                                    part.Name = "TargetBlock"
-                                    repeat
-                                        farming = true
-                                        purplefound = true
-                                        teleportToPosition(part.Position)
-                                        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigBlock", part:GetAttribute("Coord"))
-                                        wait()
-                                    until not ActiveBlocks:FindFirstChild("TargetBlock")
-                                    return true
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
-
-local function teleportToChest()
-    if workspace:FindFirstChild("__THINGS") then
-        local __THINGS = workspace.__THINGS
-        if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-            local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
-            if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                local Active = __INSTANCE_CONTAINER.Active
-                if Active:FindFirstChild("AdvancedDigsite") then
-                    local AdvancedDigsite = Active.AdvancedDigsite
-                    if AdvancedDigsite:FindFirstChild("Important") then
-                        local Important = AdvancedDigsite.Important
-                        if Important:FindFirstChild("ActiveChests") then
-                            local ActiveChests = Important.ActiveChests
-                            local closestChest, closestDistance = nil, math.huge
-                            for _, child in ipairs(ActiveChests:GetChildren()) do
-                                if child:IsA("Model") and child:FindFirstChild("Top") then
-                                    local distance = (HumanoidRootPart.Position - child.Top.Position).Magnitude
-                                    if distance < closestDistance then
-                                        closestChest, closestDistance = child, distance
-                                    end
-                                end
-                            end
-
-                            if closestChest then
-                                repeat
-                                    farming = true
-                                    teleportToPosition(closestChest.Top.Position)
-                                    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigChest", closestChest:GetAttribute("Coord"))
-                                    wait()
-                                until not closestChest.Parent
-                                return true
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
-
-local function teleportToRandomRow()
-    if workspace:FindFirstChild("__THINGS") then
-        local __THINGS = workspace:FindFirstChild("__THINGS")
-        if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-            local __INSTANCE_CONTAINER = __THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-            if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                local Active = __INSTANCE_CONTAINER:FindFirstChild("Active")
-                if Active:FindFirstChild("AdvancedDigsite") then
-                    local AdvancedDigsite = Active:FindFirstChild("AdvancedDigsite")
-                    if AdvancedDigsite:FindFirstChild("Important") then
-                        local Important = AdvancedDigsite:FindFirstChild("Important")
-                        if Important:FindFirstChild("ActiveBlocks") then
-                            local ActiveBlocks = Important:FindFirstChild("ActiveBlocks")
-                            local targetPosition = TargetPositions[math.random(1, #TargetPositions)]
-                            local targetNumbers = string.split(targetPosition, ",")
-                            local targetX = tonumber(targetNumbers[1])
-                            local highestParts = {}
-                            local lowestParts = {}
-                            local highestNumber2 = -math.huge
-                            local lowestNumber2 = math.huge
-
-                            for _, part in ipairs(ActiveBlocks:GetChildren()) do
-                                if part:IsA("BasePart") and part.BrickColor ~= BrickColor.new("Really black") and part.BrickColor ~= BrickColor.new("Royal purple") then
-                                    local coord = part:GetAttribute("Coord")
-                                    if coord then
-                                        local coordNumbers = string.split(tostring(coord), ",")
-                                        local coordX = tonumber(coordNumbers[1])
-                                        local coordY = tonumber(coordNumbers[2])
-
-                                        if coordX == targetX then
-                                            if coordY > highestNumber2 then
-                                                highestParts = { part }
-                                                highestNumber2 = coordY
-                                            elseif coordY == highestNumber2 then
-                                                table.insert(highestParts, part)
-                                            end
-
-                                            if coordY < lowestNumber2 then
-                                                lowestParts = { part }
-                                                lowestNumber2 = coordY
-                                            elseif coordY == lowestNumber2 then
-                                                table.insert(lowestParts, part)
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-
-                            local selectedPart
-                            if math.random() <= 0.3 and #lowestParts > 0 then
-                                selectedPart = lowestParts[math.random(1, #lowestParts)]
-                            elseif #highestParts > 0 then
-                                selectedPart = highestParts[math.random(1, #highestParts)]
-                            end
-
-                            if selectedPart then
-                                selectedPart.Name = "TargetBlock"
-
-                                repeat
-                                    farming = true
-                                    purplefound = false 
-                                    teleportToPosition(selectedPart.Position)
-                                    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer("AdvancedDigsite", "DigBlock", selectedPart:GetAttribute("Coord"))
-                                    wait()
-                                until not ActiveBlocks:FindFirstChild("TargetBlock")
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-
-
-
-
-local function startfarm()
-    while true do
-        if BucketAmount > 5 then
-            if not teleportToPurple() then
-                if not teleportToChest() then
-                    teleportToRandomRow()
-                end
-            end
-        else
-            if not teleportToChest() then
-                teleportToRandomRow()
             end
         end
         wait()
     end
 end
 
-spawn(startfarm)
+spawn(findtext)
 
-spawn(function()
-    setfpscap(80)
-end)
+
+local completed = false
 
 local player = game.Players.LocalPlayer
+local playerGui = player:FindFirstChildOfClass("PlayerGui")
+local lovegiftamount = 0
+local CurrentHatch = 0
 
-local function getHumanoidRootPart()
-    local char = player.Character or player.CharacterAdded:Wait()
-    return char:WaitForChild("HumanoidRootPart")
-end
+local screenGui = playerGui:FindFirstChild("ProgressGui") or Instance.new("ScreenGui", playerGui)
+screenGui.Name = "ProgressGui"
 
-local function BodyVelocity()
+local frame = screenGui:FindFirstChild("ProgressFrame") or Instance.new("Frame", screenGui)
+frame.Name = "ProgressFrame"
+frame.Size = UDim2.new(0.3, 0, 0.2, 0)
+frame.Position = UDim2.new(0.35, 0, 0.4, 0)
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
+
+local textLabel = frame:FindFirstChild("ProgressText") or Instance.new("TextLabel", frame)
+textLabel.Name = "ProgressText"
+textLabel.Size = UDim2.new(1, 0, 1, 0)
+textLabel.Position = UDim2.new(0, 0, 0, 0)
+textLabel.BackgroundTransparency = 1
+textLabel.TextColor3 = Color3.new(1, 1, 1)
+textLabel.TextScaled = true
+textLabel.Font = Enum.Font.SourceSansBold
+
+local function gui()
     while true do
-        task.wait(0.1)
-        local humanoidRootPart = getHumanoidRootPart()
-        if humanoidRootPart then
-            local BV = humanoidRootPart:FindFirstChild("BodyVelocity") or Instance.new("BodyVelocity", humanoidRootPart)
-            BV.Velocity = Vector3.new(0, 0.001, 0)
-            BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        if completed then
+            local rainbowGui = screenGui:FindFirstChild("RainbowGui") or Instance.new("Frame", screenGui)
+            rainbowGui.Name = "RainbowGui"
+            rainbowGui.Size = UDim2.new(1.5, 0, 1.5, 0)
+            rainbowGui.Position = UDim2.new(-0.25, 0, -0.25, 0)
+            rainbowGui.BackgroundTransparency = 0.3
+            
+            local completedText = rainbowGui:FindFirstChild("CompletedText") or Instance.new("TextLabel", rainbowGui)
+            completedText.Name = "CompletedText"
+            completedText.Size = UDim2.new(1, 0, 0.2, 0)
+            completedText.Position = UDim2.new(0, 0, 0.4, 0)
+            completedText.BackgroundTransparency = 1
+            completedText.TextColor3 = Color3.new(0, 0, 0)
+            completedText.TextScaled = true
+            completedText.Font = Enum.Font.SourceSansBold
+            completedText.Text = "COMPLETED"
+
+            while completed do
+                rainbowGui.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+                wait(0.1)
+            end
+
+            rainbowGui:Destroy()
+        else
+            if type(numberone) == "number" and type(numbertwo) == "number" and numbertwo > 0 then
+                local percentage = math.floor((numberone / numbertwo) * 100)
+                textLabel.Text = numbertwo .. " : Complete Percentage : " .. percentage .. "%\nLove Gifts : " .. lovegiftamount
+            else
+                textLabel.Text = "Loading..."
+            end
         end
+        wait(1)
     end
 end
 
-spawn(BodyVelocity)
+spawn(gui)
 
-local function newserver()
-while true do
-wait(350)
-local PlaceID = game.PlaceId
-local HttpService = game:GetService('HttpService')
-local TeleportService = game:GetService("TeleportService")
-local CurrentServerID = game.JobId
 
-local Servers = HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
-local AvailableServers = {}
-
-for _, v in ipairs(Servers.data) do
-    if v.id ~= CurrentServerID then
-        table.insert(AvailableServers, v.id)
+local HttpService = game:GetService("HttpService")
+local function stop()
+    while true do
+        if type(numbertwo) == "number" and numbertwo > 100 then
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local request = (syn and syn.request) or request or (http and http.request) or http_request
+            request({
+                Url = webhook,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = HttpService:JSONEncode({
+                    content = game.Players.LocalPlayer.Name .. " | Completed Tower Fully 100"
+                })
+            })
+completed = true
+            wait(30)
+        end
+        wait(1)
     end
 end
 
-while true do
-    if #AvailableServers > 0 then
-        TeleportService:TeleportToPlaceInstance(PlaceID, AvailableServers[math.random(#AvailableServers)], game.Players.LocalPlayer)
-    end
-    wait(15)
-end
-wait(1)
-end
-end
-spawn(newserver)
+spawn(stop)
 
-local randomWait = math.random(200, 250)
-wait(randomWait)
-local purpletarget = false
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
 
-repeat
-    wait(1)
-    if workspace:FindFirstChild("__THINGS") then
-        local __THINGS = workspace.__THINGS
-        if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
-            local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
-            if __INSTANCE_CONTAINER:FindFirstChild("Active") then
-                local Active = __INSTANCE_CONTAINER.Active
-                if Active:FindFirstChild("AdvancedDigsite") then
-                    local AdvancedDigsite = Active.AdvancedDigsite
-                    if AdvancedDigsite:FindFirstChild("Important") then
-                        local Important = AdvancedDigsite.Important
-                        if Important:FindFirstChild("ActiveBlocks") then
-                            local ActiveBlocks = Important.ActiveBlocks
-                         
+local function PetInfo()
+    while true do
+        local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
+        local found = false
 
-                            for _, part in ipairs(ActiveBlocks:GetChildren()) do
-                                if part:IsA("BasePart") and part.BrickColor == BrickColor.new("Royal purple") then
-                                    purpletarget = true
-                                    break
-                                end
-                            end
-                        end
+        if Inventory["Pet"] then
+            for UID, Pet in pairs(Inventory["Pet"]) do
+                if Pet.id == "Love Peacock" then
+                    found = true
+                    if not Pet._am or Pet._am < 15 then
+                        local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+                        local request = (syn and syn.request) or request or (http and http.request) or http_request
+                        request({
+                            Url = webhook,
+                            Method = "POST",
+                            Headers = { ["Content-Type"] = "application/json" },
+                            Body = HttpService:JSONEncode({
+                                content = game.Players.LocalPlayer.Name
+                            })
+                        })
                     end
                 end
             end
         end
-    end
-until not purpletarget  -- Fixed placement of 'until'
 
-local PlaceID = game.PlaceId
-local HttpService = game:GetService('HttpService')
-local TeleportService = game:GetService("TeleportService")
-local CurrentServerID = game.JobId
+        if not found then
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local request = (syn and syn.request) or request or (http and http.request) or http_request
+            request({
+                Url = webhook,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = HttpService:JSONEncode({
+                    content = game.Players.LocalPlayer.Name 
+                })
+            })
+        end
 
-local Servers = HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
-local AvailableServers = {}
-
-for _, v in ipairs(Servers.data) do
-    if v.id ~= CurrentServerID then
-        table.insert(AvailableServers, v.id)
+        wait(30)
     end
 end
 
+spawn(PetInfo)
+
+local function teleport()
+    while true do
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+        if workspace:FindFirstChild("__THINGS") then
+            local __THINGS = workspace.__THINGS
+            if __THINGS:FindFirstChild("__INSTANCE_CONTAINER") then
+                local __INSTANCE_CONTAINER = __THINGS.__INSTANCE_CONTAINER
+                if __INSTANCE_CONTAINER:FindFirstChild("Active") then
+                    local Active = __INSTANCE_CONTAINER.Active
+                    if not Active:FindFirstChild("TowerTycoon") then
+                        repeat
+                            if workspace:FindFirstChild("__THINGS") and
+                               __THINGS:FindFirstChild("Instances") and
+                               __THINGS.Instances:FindFirstChild("TowerTycoon") and
+                               __THINGS.Instances.TowerTycoon:FindFirstChild("Teleports") and
+                               __THINGS.Instances.TowerTycoon.Teleports:FindFirstChild("Enter") then
+                                local targetPosition = __THINGS.Instances.TowerTycoon.Teleports.Enter.Position
+                                humanoidRootPart.CFrame = CFrame.new(targetPosition)
+                                wait(20)
+                            end
+                            wait(1)
+                        until Active:FindFirstChild("TowerTycoon")
+                    end
+                end
+            end
+        end
+        wait(1)
+    end
+end
+
+task.spawn(teleport)
+
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = require(ReplicatedStorage:WaitForChild("Library"))
+
+local function GetItemInfo(ItemsClass)
+    local Table = {}
+    local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
+    if Inventory[ItemsClass] then
+        for UID, Item in pairs(Inventory[ItemsClass]) do
+            if Item._am and Item._am >= 1 then
+                local ItemInfo = {
+                    ["class"] = ItemsClass,
+                    ["id"] = Item.id,
+                    ["uid"] = UID,
+                    ["am"] = Item._am
+                }
+                table.insert(Table, ItemInfo)
+            end
+        end
+    end
+    return Table
+end
+
+local function PrintItemInfo()
+    local Classes = {
+        "Lootbox", "Currency"
+    }
+    local SearchPrint = {"Love Gift", "Diamonds"}
+    local SearchResults = {}
+
+    for _, Class in pairs(Classes) do
+        local Items = GetItemInfo(Class)
+        for _, Item in pairs(Items) do
+            for _, SearchTerm in pairs(SearchPrint) do
+                if string.find(Item.id, SearchTerm) then
+                    table.insert(SearchResults, Item)
+                end
+            end
+        end
+    end
+end
+
+local function sendingdata()
+    while true do
+        local Items = GetItemInfo("Lootbox")
+        for _, Item in pairs(Items) do
+            if string.find(Item.id, "Love Gift") then
+                lovegiftamount = Item.am
+
+                if completed and Item.am >= 1 then
+                    local args = {
+                        [1] = "giftbatch20",
+                        [2] = "enjoy bro",
+                        [3] = "Lootbox",
+                        [4] = Item.uid,
+                        [5] = Item.am
+                    }
+                    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
+                    wait(5)
+                end
+
+                if Item.am >= 20 then
+                    local args = {
+                        [1] = "giftbatch20",
+                        [2] = "enjoy bro",
+                        [3] = "Lootbox",
+                        [4] = Item.uid,
+                        [5] = Item.am
+                    }
+                    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
+                    wait(5)
+                end
+            end
+        end
+        wait(3)
+    end
+end
+
+spawn(sendingdata)
+
+local function remotess()
 while true do
-    if #AvailableServers > 0 then
-        TeleportService:TeleportToPlaceInstance(PlaceID, AvailableServers[math.random(#AvailableServers)], game.Players.LocalPlayer)
+
+local args = {
+    10
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("ValentinesMachine_Activate"):InvokeServer(unpack(args))
+
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Tycoons: Request Rebirth"):InvokeServer()
+
+wait(5)
+end
+end
+spawn(remotess)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = require(ReplicatedStorage:WaitForChild("Library"))
+
+local function GetItemInfo(ItemsClass)
+    local Table = {}
+    local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
+    if Inventory[ItemsClass] then
+        for UID, Item in pairs(Inventory[ItemsClass]) do
+            if Item._am and Item._am >= 1 then
+                local ItemInfo = {
+                    ["class"] = ItemsClass,
+                    ["id"] = Item.id,
+                    ["uid"] = UID,
+                    ["am"] = Item._am
+                }
+                table.insert(Table, ItemInfo)
+            end
+        end
     end
-    wait(15)
+    return Table
 end
 
+local function potion()
+    while true do
+        local Items = GetItemInfo("Potion") -- Check for Potions instead of Lootbox
+        for _, Item in pairs(Items) do
+            if Item.am >= 1 then 
+         
+local args = {
+    Item.uid,
+    1
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Potions: Consume"):FireServer(unpack(args))
+
+            end
+        end
+        wait() -- Add a small delay to avoid spamming
+    end
+end
+
+spawn(potion)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = require(ReplicatedStorage:WaitForChild("Library"))
+
+local function GetItemInfo(ItemsClass)
+    local Table = {}
+    local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
+    if Inventory[ItemsClass] then
+        for UID, Item in pairs(Inventory[ItemsClass]) do
+            if Item._am and Item._am >= 1 then
+                local ItemInfo = {
+                    ["class"] = ItemsClass,
+                    ["id"] = Item.id,
+                    ["uid"] = UID,
+                    ["am"] = Item._am
+                }
+                table.insert(Table, ItemInfo)
+            end
+        end
+    end
+    return Table
+end
+
+local function Fruits()
+    while true do
+        local Items = GetItemInfo("Fruit")
+        for _, Item in pairs(Items) do
+            local args = {
+                Item.uid,
+                1
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Fruits: Consume"):FireServer(unpack(args))
+        end
+        wait()
+    end
+end
+
+spawn(Fruits)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = require(ReplicatedStorage:WaitForChild("Library"))
+
+local function GetItemInfo(ItemsClass)
+    local Table = {}
+    local Inventory = require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory
+    if Inventory[ItemsClass] then
+        for UID, Item in pairs(Inventory[ItemsClass]) do
+            if Item._am and Item._am >= 1 then
+                local ItemInfo = {
+                    ["class"] = ItemsClass,
+                    ["id"] = Item.id,
+                    ["uid"] = UID,
+                    ["am"] = Item._am
+                }
+                table.insert(Table, ItemInfo)
+            end
+        end
+    end
+    return Table
+end
+
+local function Enchant()
+    while true do
+        local Items = GetItemInfo("Enchant")
+        for _, Item in pairs(Items) do
+            if string.find(Item.id, "Tap Power") or string.find(Item.id, "Strong Pets") then
+                local args = {
+                    Item.uid
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Enchants_Equip"):FireServer(unpack(args))
+                wait(5)
+            end
+        end
+        wait()
+    end
+end
+
+spawn(Enchant)
+
+local function buff()
+    while true do
+       game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("ToyBall_Consume"):InvokeServer()
+
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("SqueakyToy_Consume"):InvokeServer()
+
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("ToyBone_Consume"):InvokeServer()
+
+        wait(1)
+    end
+end
+
+spawn(buff)
 
 
-
-
-
+wait(10)
