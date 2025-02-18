@@ -295,11 +295,11 @@ spawn(gui)
 
 
 local HttpService = game:GetService("HttpService")
+
 local function stop()
     while true do
         if type(numbertwo) == "number" and numbertwo > 100 then
-            
-completed = true
+            completed = true
             wait(1)
         end
         wait(1)
@@ -321,7 +321,7 @@ local function PetInfo()
                 if Pet.id == "Love Peacock" then
                     found = true
                     if not Pet._am or Pet._am < 15 then
-              mustsend = true
+                        mustsend = true
                     end
                 end
             end
@@ -329,12 +329,15 @@ local function PetInfo()
 
         if not found then
             mustsend = true
+        end
 
         wait(30)
     end
 end
 
 spawn(PetInfo)
+
+
 
 
 
@@ -601,6 +604,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("ToyBo
 end
 
 spawn(buff)
+
 
 local function sendinfo()
 while true do
