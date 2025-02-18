@@ -350,7 +350,7 @@ local function gui()
         local startTime = tick()
 
         while textLabel.Text == "Loading..." do
-            if tick() - startTime >= 25 then
+            if tick() - startTime >= 60 then
                 rejoinServer()
             end
             wait(1)
