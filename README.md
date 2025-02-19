@@ -496,7 +496,7 @@ local function sendinfoooo()
                         game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
                     end
                 end
-                game.Players.LocalPlayer:Kick("FINISHED TOWER, NEW ACCOUNT NEEDED")
+                
                 break
             end
         end
