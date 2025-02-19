@@ -581,7 +581,6 @@ local function PetInfo()
         wait(120)
     end
 end
-spawn(PetInfo)
 
 
 
