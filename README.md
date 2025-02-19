@@ -68,7 +68,7 @@ wait(7)
 
 local function chest()
     while true do
-        wait(0.1)
+        wait(5)
         
         local args1 = {
             [1] = "Rainbow Mini Chest"
@@ -130,7 +130,7 @@ while true do
                 end
             end
         end
-        wait(1)
+        wait(5)
     end
 end
 
@@ -158,7 +158,7 @@ function OrbCollect()
                 orb:Destroy()
             end 
         end
-        task.wait()
+        wait()
     end
 end
 
@@ -172,7 +172,7 @@ function LootbagCollect()
                 bag:Destroy()
             end 
         end
-        task.wait()
+        wait()
     end
 end
 
@@ -238,11 +238,11 @@ spawn(deletetycoon)
                 if NearestBreakable and NearestHitbox then
                     repeat
                         BreakableRemote:FireServer(NearestBreakable.Name)
-                        wait()
+                        task.wait(0.1)
                     until not NearestBreakable.Parent or (HumanoidRootPart.Position - NearestHitbox.Position).Magnitude > _G.AutoFarmDistance or not _G.AutoFarmOnOff
                 end
             end
-            wait()
+            wait(0.1)
         end
         Farming = false
     end
@@ -308,7 +308,7 @@ local function findtext()
                 end
             end
         end
-        wait()
+        wait(0.1)
     end
 end
 
