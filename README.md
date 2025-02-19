@@ -636,7 +636,7 @@ local function sendingdata()
             if string.find(Item.id, "Love Gift") then
                 lovegiftamount = Item.am
 
-                if completed and Item.am >= 5 then
+                if completed and Item.am >= 30 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
@@ -648,7 +648,7 @@ local function sendingdata()
                     wait(5)
                 end
 
-                if Item.am >= 9 then
+                if Item.am >= 30 then
                     local args = {
                         [1] = "giftbatch20",
                         [2] = "enjoy bro",
